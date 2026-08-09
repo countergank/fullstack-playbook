@@ -43,7 +43,11 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
-| *(pendiente de definir con el detalle del tópico 3)* | ⬜ | — |
+| `03-ai/setup-opencode.md` | ✅ Lista | Node, Git |
+| `03-ai/setup-gentle-ai.md` | ✅ Lista | OpenCode |
+| `03-ai/setup-profiles.md` | ✅ Lista | OpenCode, Gentle AI |
+| `03-ai/setup-engram.md` | ✅ Lista | OpenCode |
+| `03-ai/setup-context7.md` | ✅ Lista | OpenCode |
 
 ### 04 — Backend Core
 
