@@ -35,7 +35,7 @@ HTML semántico, CSS moderno (Flexbox, Grid, responsive), JavaScript, TypeScript
 
 ## 8. Frameworks & Herramientas Frontend
 
-React, manejo de estado, routing, bundlers, Next.js, sistemas de estilos (CSS Modules, Tailwind, styled-components).
+React, manejo de estado, routing, Vite (bundler y dev server), Vitest (testing de componentes), Next.js, sistemas de estilos (CSS Modules, Tailwind, styled-components).
 
 ## 9. DevOps & Deployment
 
@@ -71,4 +71,4 @@ Agile/Scrum, code review, documentación técnica, comunicación efectiva, toma 
 
 ---
 
-> Estado: **1–7** completos — **8** en progreso.
+> Estado: **1–8** completos — **9** en progreso.
