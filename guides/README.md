@@ -88,6 +88,9 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 | `06-databases/setup-postgres.md` | ✅ Lista | Docker |
 | `06-databases/setup-mongodb.md` | ✅ Lista | Docker |
 | `06-databases/setup-redis.md` | ✅ Lista | Docker |
+| `06-databases/setup-dbeaver.md` | ✅ Lista | Docker |
+| `06-databases/setup-compass.md` | ✅ Lista | Docker |
+| `06-databases/setup-redis-insight.md` | ✅ Lista | Docker |
 
 ---
 

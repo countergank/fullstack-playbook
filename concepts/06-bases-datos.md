@@ -287,6 +287,18 @@ docker run --rm -v pgdata:/data -v $(pwd):/backup alpine tar xzf /backup/pgdata-
 
 ---
 
+## 6.10 Herramientas de trabajo
+
+*En criollo:* Ningún IDE es obligatorio: DBeaver es la opción universal para SQL, y las GUIs oficiales de Mongo y Redis son las más completas para explorar documentos y keys. ¿Por qué importa? Porque ver los datos directamente te da feedback inmediato sobre lo que tu código escribe en la DB.
+
+| Herramienta | Para qué | Guía |
+|-------------|----------|------|
+| **DBeaver Community** | IDE SQL universal — PostgreSQL, MySQL, etc. | [setup-dbeaver](../guides/06-databases/setup-dbeaver.md) |
+| **MongoDB Compass** | GUI oficial de MongoDB — ver docs, modelar, aggregation | [setup-compass](../guides/06-databases/setup-compass.md) |
+| **Redis Insight** | GUI oficial de Redis — ver keys, TTL, memoria | [setup-redis-insight](../guides/06-databases/setup-redis-insight.md) |
+
+---
+
 > **Check de comprensión**:
 > 1. ¿Cuándo modelarías datos como documentos embebidos en MongoDB y cuándo como referencias?
 > 2. ¿Qué es el problema N+1? ¿Cómo lo resolvés con Prisma y con queries manuales?
