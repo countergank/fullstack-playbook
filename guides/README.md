@@ -66,7 +66,14 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 ### 05 — Frameworks Backend
 
-> 📋 Sin guías por ahora — el concept 05 cubre Express, NestJS, Fastify, Prisma, logging, queues.
+> 📋 Orden de ejecución: [`05-frameworks-backend/README.md`](05-frameworks-backend/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `05-frameworks-backend/setup-prisma.md` | ✅ Lista | Express, PostgreSQL |
+| `05-frameworks-backend/setup-logging.md` | ✅ Lista | Express |
+| `05-frameworks-backend/setup-queues.md` | ✅ Lista | Express, Redis |
+| `05-frameworks-backend/setup-websockets.md` | ✅ Lista | Express |
 
 ### 06 — Bases de Datos & Persistencia
 
