@@ -16,7 +16,7 @@ CodeGraph indexa los símbolos y relaciones de tu código (funciones, clases, im
 
 ### 1. Inicializar CodeGraph en el repositorio
 ```bash
-cd /home/leandrojaviercepeda/countergank/fullstack-playbook
+cd ~/proyectos/fullstack-playbook
 gentle-ai codegraph init --cwd .
 ```
 - [ ] Aparece el directorio `.codegraph/` en la raíz del repo
@@ -45,7 +45,7 @@ Dentro de OpenCode (asegurate de estar en el directorio del repo), preguntá:
 ## Verificación
 
 ```bash
-gentle-ai codegraph init --cwd /home/leandrojaviercepeda/countergank/fullstack-playbook
+gentle-ai codegraph init --cwd ~/proyectos/fullstack-playbook
 ls .codegraph/   # el directorio existe con archivos de índice
 ```
 **Si `.codegraph/` existe con contenido → CodeGraph listo. ✅**

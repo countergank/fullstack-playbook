@@ -69,7 +69,7 @@ cat ~/.config/opencode/tui.json
 
 ```bash
 gentle-ai --version           # 2.x.x
-gentle-ai engram current-project --cwd /home/leandrojaviercepeda/countergank/fullstack-playbook
+gentle-ai engram current-project --cwd ~/proyectos/fullstack-playbook
 ```
 **Si `gentle-ai --version` responde y `engram current-project` detecta tu proyecto → Gentle AI listo. ✅**
 
