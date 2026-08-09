@@ -12,12 +12,29 @@ OpenCode es el runtime donde corren los agentes de Gentle AI. Provee herramienta
 
 ---
 
+## Antes de empezar — ¿Tenés Node.js?
+
+OpenCode es un paquete npm, así que necesitás Node.js. Pero NO cualquier instalación: necesitás un **gestor de versiones** para poder cambiar de Node según el proyecto sin romper nada.
+
+**nvm (Node Version Manager)** es la herramienta estándar para esto. Te permite instalar múltiples versiones de Node en paralelo y switchear entre ellas con un solo comando. Si aún no lo tenés, seguí primero la guía completa:
+
+> 👉 **`guides/02-programming/setup-node.md`** — instalación de nvm + Node LTS + pnpm.
+
+Una vez que tengas Node, verificá:
+
+```bash
+node --version   # deberías ver v22.x.x (LTS)
+npm --version    # viene con Node
+```
+
+**Si `node --version` responde con una versión LTS → seguí adelante.** Si no, volvé a `setup-node.md`.
+
+---
+
 ## Checklist
 
 ### 1. Instalar OpenCode
 ```bash
-nvm use --lts   # asegurarse de tener Node LTS activo
-
 # Instalar CLI globalmente
 npm install -g @opencode-ai/cli@latest
 
@@ -25,12 +42,12 @@ npm install -g @opencode-ai/cli@latest
 opencode --version
 ```
 
-### 2. Verificar providers disponibles actuales
+### 2. Verificar proveedores y modelos
 ```bash
-# Listar providers que opencode reconoce (con modelos gratuitos incluidos)
-opencode run --help --model 2>&1 | head -20
+# Ver la versión instalada (1.18+ incluye modelos gratuitos)
+opencode --version
 ```
-- [ ] Deberías ver opciones como `opencode/deepseek-v4-flash-free`, `opencode/north-mini-code-free`
+- [ ] Si la versión es 1.18 o superior, tenés acceso a `opencode/deepseek-v4-flash-free` y otros modelos gratuitos.
 
 ### 3. Lanzar OpenCode en modo terminal
 ```bash
@@ -45,7 +62,7 @@ OpenCode ya registra el proveedor `opencode` como nativo — no necesitas API ke
 
 ### 5. Atajo clave: cambiar de perfil
 - [ ] Dentro de OpenCode, presioná **Tab** para abrir el selector de perfil
-- [ ] Deberías ver los perfiles disponibles: `sdd-orchestrator-go`, `sdd-orchestrator-zen-free`, `sdd-orchestrator-ollama-local` (si configuraste Ollama)
+- [ ] Deberías ver los perfiles disponibles: `sdd-orchestrator-go` y `sdd-orchestrator-zen-free`
 
 ### 6. Primer comando de prueba
 ```
@@ -58,17 +75,17 @@ Escribí un "Hola mundo" en Node.js
 ## Verificación
 
 ```bash
-opencode --version  # responde
-opencode run --help --model 2>&1 | grep "free"  # modelos gratuitos disponibles
+node --version       # LTS (v22.x)
+opencode --version   # 1.x.x
 ```
 
-**Si `opencode` responde en la terminal y ves modelos free → OpenCode listo. ✅**
+**Si `node` y `opencode` responden con sus versiones → OpenCode listo. ✅**
 
 ---
 
 ## Configuración recomendada (`~/.config/opencode/opencode.json`)
 
-El archivo se crea automáticamente la primera vez que lanzás OpenCode. No necesitás tocarlo salvo para agregar providers custom (Ollama, OpenRouter, etc.). Las guías `setup-ollama.md` y `setup-profiles.md` cubren modificaciones avanzadas.
+El archivo se crea automáticamente la primera vez que lanzás OpenCode. No necesitás tocarlo salvo para agregar providers custom. La guía `setup-profiles.md` cubre la configuración de perfiles (go, zen-free).
 
 ---
 
