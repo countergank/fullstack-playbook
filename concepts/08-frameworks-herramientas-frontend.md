@@ -45,6 +45,102 @@ function Counter() {
 }
 ```
 
+### Los hooks que no pueden faltar
+
+React tiene pocos hooks — pero ESOS pocos son la mitad de la biblioteca. `useState` ya lo viste; estos son el resto de los que usás TODOS los días:
+
+| Hook | Qué hace | Caso típico |
+|------|----------|-------------|
+| **`useEffect`** | Ejecutar efectos secundarios (fetch, suscripciones, timers, sincronizar con APIs externas) | Cargar datos al montar, suscribirse a un store, limpiar timers |
+| **`useRef`** | Referencia mutable que NO provoca re-render; persistir valor entre renders; apuntar a un nodo DOM | Foco de un input, guardar el valor anterior, medir un elemento |
+| **`useMemo`** | Memorizar el RESULTADO de un cálculo costoso (solo recalcula si cambian las deps) | Ordenar/filtrar listas grandes, cálculos derivados |
+| **`useCallback`** | Memorizar una FUNCIÓN (estable entre renders, no recrea el callback) | Pasar callbacks a hijos memoizados, evita re-renders |
+| **`useReducer`** | Estado complejo con lógica tipo reducer (`state`, `action` → `newState`) | Formularios multi-campo, estado con transiciones |
+
+#### `useEffect` — el rey de los efectos secundarios
+
+```tsx
+function UserProfile({ userId }: { userId: number }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;                      // evita setState tras desmontar
+
+    fetch(`/api/users/${userId}`)
+      .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(data => { if (!cancelled) setUser(data); })
+      .catch(err => console.error(err));
+
+    return () => { cancelled = true; };         // cleanup: se corre al desmontar o al cambiar deps
+  }, [userId]);                                 // deps: se re-ejecuta SOLO si userId cambia
+
+  return <div>{user?.name ?? 'Cargando...'}</div>;
+}
+```
+
+**Las 2 reglas de oro de `useEffect`:**
+1. **`[]` deps = corre UNO vez al montar** (más el cleanup al desmontar). Sin deps explícitas = corre en CADA render (¡casi siempre es un bug!).
+2. **Todo lo que setéeas adentro debe ser parte de un ciclo**: `setState` dentro de un `useEffect` con deps mal definidas = loop infinito. La cura casi siempre es definir las deps exactas.
+
+#### `useRef` — memoria mutable sin re-render
+
+```tsx
+function FocusInput() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div>
+      <input ref={inputRef} />
+      <button onClick={() => inputRef.current?.focus()}>Enfocar</button>
+    </div>
+  );
+}
+```
+
+> `useRef` NO dispara re-render cuando cambia `.current`. Si querés que un cambio se REEJECUTE la UI → es `useState`, no `useRef`.
+
+#### `useMemo` y `useCallback` — evitar trabajo y renders innecesarios
+
+```tsx
+// useMemo: el resultado filtrado NO se recalcula en cada render
+const visibleItems = useMemo(
+  () => items.filter(it => it.visible).sort(byDate),
+  [items, sortOrder]
+);
+
+// useCallback: la MISMA identidad de función entre renders
+const handleAdd = useCallback(
+  (item: Item) => setItems(prev => [...prev, item]),
+  []
+);
+```
+
+> **Regla**: NO envuelvas todo en `useMemo`/`useCallback` — memorizar también tiene costo. Usalos cuando el cálculo es pesado o el componente hijo está memoizado (`React.memo`). Primero medí, después optimizá.
+
+#### `useReducer` — estado complejo y predecible
+
+```tsx
+type State = { count: number };
+type Action = { type: 'incr' } | { type: 'reset' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'incr':  return { count: state.count + 1 };
+    case 'reset': return { count: 0 };
+  }
+}
+
+const [state, dispatch] = useReducer(reducer, { count: 0 });
+// dispatch({ type: 'incr' })
+```
+
+- Toda transición de estado pasa por una función pura `(state, action) → newState` — testeable sin UI.
+- Cuando el estado tiene varias piezas que cambian juntas (formulario, carrito), `useReducer` gana a `useState`.
+
+### Hooks avanzados (existen, no son el default)
+
+`useLayoutEffect` (efecto síncrono antes del paint), `useTransition` (actualizaciones no urgentes), `useDeferredValue`, `useId` (IDs accesibles), `useImperativeHandle` (API expuesta por `forwardRef`). Los ves cuando los necesites — los 6 esenciales (`useState`, `useEffect`, `useRef`, `useMemo`, `useCallback`, `useReducer`) son el 95% del uso real.
+
 ### La regla de oro: props fluyen hacia abajo, eventos hacia arriba
 
 - Los datos viajan de padre a hijo por **props** (unidireccional).
@@ -360,3 +456,5 @@ function App() {
 > 4. ¿En qué se diferencia un Server Component de un Client Component en Next.js? ¿Cómo decidís cuál usar?
 > 5. ¿Por qué Vitest se siente nativo con Vite? ¿Qué hace `vitest run` distinto de `vitest`?
 > 6. ¿Qué problema resuelven los tres sistemas de estilos? ¿Cuál elegirías para un proyecto nuevo y por qué?
+> 7. ¿Qué pasa si ponés `useEffect` sin array de deps? ¿Y con `[]` pero usando un valor que cambia? ¿En qué se diferencia `useRef` de `useState`?
+> 8. Tenés una lista de 10.000 items que se filtra en cada render — ¿qué hook usás y por qué?

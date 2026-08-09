@@ -106,6 +106,20 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 | `07-frontend-core/setup-accesibilidad.md` | ✅ Lista | HTML, CSS |
 | `07-frontend-core/setup-web-apis.md` | ✅ Lista | JavaScript |
 
+### 08 — Frameworks & Herramientas Frontend
+
+> 📋 Orden de ejecución: [`08-frontend-frameworks/README.md`](08-frontend-frameworks/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `08-frontend-frameworks/setup-vite-react.md` | ✅ Lista | Node, TS (07) |
+| `08-frontend-frameworks/setup-react-hooks.md` | ✅ Lista | Vite + React |
+| `08-frontend-frameworks/setup-estado-global.md` | ✅ Lista | React |
+| `08-frontend-frameworks/setup-react-router.md` | ✅ Lista | React |
+| `08-frontend-frameworks/setup-vitest.md` | ✅ Lista | Vite + React |
+| `08-frontend-frameworks/setup-nextjs.md` | ✅ Lista | Node, React |
+| `08-frontend-frameworks/setup-sistemas-estilos.md` | ✅ Lista | React |
+
 ---
 
 ## Verificación general del entorno
