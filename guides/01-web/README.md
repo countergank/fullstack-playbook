@@ -1,10 +1,10 @@
 # Guides — 01 Fundamentos de la Web
 
-> 📌 Estas guías ya fueron identificadas, pero **pueden esperar** a los tópicos donde se necesitan (Frontend o Backend). Ejecutalas cuando llegues ahí, salvo que quieras prepararlas antes.
+> 📌 Estás a punto de ver guías de la Web con tiempos distintos: `setup-browser-devtools.md` ya está lista y se ejecuta antes del tópico 7. Las otras dos pueden esperar a los tópicos donde se necesitan (Frontend o Backend). Ejecutalas cuando llegues ahí, salvo que quieras prepararlas antes.
 
 | Guía | Estado | Cuándo ejecutar |
 |------|--------|-----------------|
-| `setup-browser-devtools.md` | ⬜ Pendiente | Antes del tópico 7 (Frontend Core) |
+| `setup-browser-devtools.md` | ✅ Lista | Ya — ejecutala antes del tópico 7 (Frontend Core) |
 | `setup-local-https.md` | ⬜ Pendiente | Antes del tópico 4 (Backend Core) |
 | `setup-dns-check-tools.md` | ⬜ Pendiente | Junto a WSL, si querés practicar DNS temprano |
 
@@ -13,8 +13,8 @@
 ## Plan breve de cada guía
 
 ### `setup-browser-devtools.md`
-- Qué: dominar Network tab (requests, timing, throttling), Console (filtros, debug), Application (cookies, storage, service workers), Sources (breakpoints).
-- Prerequisito: navegador + tópico de Frontend.
+- ✅ Lista: ya existe como guía completa ([`setup-browser-devtools.md`](setup-browser-devtools.md)). Ejecutala ANTES del tópico 7 (Frontend Core): cubre Network tab, Console, Application y Sources.
+- Prerequisito: navegador moderno.
 
 ### `setup-local-https.md`
 - Qué: correr un servidor local con HTTPS (mkcert), editar `/etc/hosts`, acceso a tu app por nombre de dominio local.
@@ -26,4 +26,4 @@
 
 ---
 
-> ⚠️ **Nota**: NO crear los archivos todavía — esperá a cada tópico para ejecutar la guía con su objetivo claro. Este README existe para recordarte qué viene.
+> ⚠️ **Nota**: solo quedan pendientes `setup-local-https.md` (backlog, antes del tópico de Backend) y `setup-dns-check-tools.md` (opcional, junto a WSL).

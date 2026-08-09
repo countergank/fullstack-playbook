@@ -23,7 +23,7 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
-| `01-web/setup-browser-devtools.md` | 🟡 Puede esperar al tópico de Frontend | — |
+| `01-web/setup-browser-devtools.md` | ✅ Lista | Navegador |
 | `01-web/setup-local-https.md` | 🟡 Puede esperar al tópico de Backend | WSL |
 | `01-web/setup-dns-check-tools.md` | 🟡 Muy simple, entra junto a WSL | WSL |
 
@@ -91,6 +91,20 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 | `06-databases/setup-dbeaver.md` | ✅ Lista | Docker |
 | `06-databases/setup-compass.md` | ✅ Lista | Docker |
 | `06-databases/setup-redis-insight.md` | ✅ Lista | Docker |
+
+### 07 — Frontend Core
+
+> 📋 Orden de ejecución: [`07-frontend-core/README.md`](07-frontend-core/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `07-frontend-core/setup-html.md` | ✅ Lista | — |
+| `07-frontend-core/setup-css-moderno.md` | ✅ Lista | HTML |
+| `07-frontend-core/setup-javascript.md` | ✅ Lista | DevTools, HTML |
+| `07-frontend-core/setup-typescript.md` | ✅ Lista | Node, JavaScript |
+| `07-frontend-core/setup-dom.md` | ✅ Lista | JavaScript |
+| `07-frontend-core/setup-accesibilidad.md` | ✅ Lista | HTML, CSS |
+| `07-frontend-core/setup-web-apis.md` | ✅ Lista | JavaScript |
 
 ---
 
