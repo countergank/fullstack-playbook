@@ -71,4 +71,4 @@ Agile/Scrum, code review, documentación técnica, comunicación efectiva, toma 
 
 ---
 
-> Estado: **1–6** completos — **7** en progreso.
+> Estado: **1–7** completos — **8** en progreso.
