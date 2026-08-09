@@ -8,7 +8,7 @@
 
 ## ¿Qué es OpenCode?
 
-OpenCode es el runtime donde corren los agentes de Gentle AI. Provee herramientas (Read, Write, Bash, Task, etc.), integración con modelos (OpenAI, Anthropic, OpenRouter, Ollama, opencode), MCP (Model Context Protocol) para memoria y documentación, y perfiles para cambiar entre distintas configuraciones de modelos con un atajo de teclado.
+OpenCode es el runtime donde corren los agentes de Gentle AI. Provee herramientas (Read, Write, Bash, Task, etc.), integración con modelos (opencode, OpenRouter, Anthropic, OpenAI), MCP (Model Context Protocol) para memoria y documentación, y perfiles para cambiar entre distintas configuraciones de modelos con un atajo de teclado.
 
 ---
 
