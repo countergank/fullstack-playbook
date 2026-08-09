@@ -43,13 +43,21 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
-| *(pendiente de definir con el tópico 3)* | ⬜ | — |
+| *(pendiente de definir con el detalle del tópico 3)* | ⬜ | — |
+
+### 04 — Backend Core
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `04-backend/setup-postgres.md` | ✅ Lista | WSL, terminal |
+| `04-backend/setup-mongodb.md` | ✅ Lista | WSL, terminal |
+| `04-backend/setup-redis.md` | ✅ Lista | WSL, terminal |
 
 ---
 
 ## Verificación general del entorno
 
-Antes de avanzar al tópico 4 (Backend), tu entorno debería permitir:
+### Antes del tópico 4 (Backend)
 
 ```bash
 # Desde la terminal Linux (WSL)
@@ -60,3 +68,13 @@ code .                 # VS Code abre el directorio actual
 ```
 
 Si todos esos comandos funcionan → el entorno del tópico 2 está listo.
+
+### Antes del tópico 6 (Bases de Datos)
+
+```bash
+sudo service postgresql status   # PostgreSQL online
+mongosh --eval "db.runCommand({ ping: 1 })"   # MongoDB responde
+redis-cli ping                  # Redis responde PONG
+```
+
+Si los tres responden → el entorno de bases de datos está listo.
