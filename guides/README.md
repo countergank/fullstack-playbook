@@ -29,17 +29,22 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 ### 02 — Fundamentos de Programación
 
+> 📋 Orden de ejecución: [`02-programming/README.md`](02-programming/README.md)
+
 | Guía | Estado | Depende de |
 |------|--------|------------|
 | `02-programming/setup-wsl.md` | ✅ Lista | — |
+| `02-programming/setup-docker.md` | ✅ Lista | WSL |
+| `02-programming/setup-vscode.md` | ✅ Lista | WSL |
 | `02-programming/setup-terminal.md` | ✅ Lista | WSL |
 | `02-programming/setup-git.md` | ✅ Lista | WSL, terminal |
 | `02-programming/setup-ssh-github.md` | ✅ Lista | Git |
 | `02-programming/setup-node.md` | ✅ Lista | WSL, terminal |
-| `02-programming/setup-vscode.md` | ✅ Lista | WSL |
 | `02-programming/setup-http-clients.md` | ✅ Lista | WSL |
 
 ### 03 — IA & Desarrollo Asistido
+
+> 📋 Orden de ejecución: [`03-ai/README.md`](03-ai/README.md)
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
@@ -51,6 +56,8 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 | `03-ai/setup-context7.md` | ✅ Lista | OpenCode |
 
 ### 04 — Backend Core
+
+> 📋 Orden de ejecución: [`04-backend/README.md`](04-backend/README.md)
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
@@ -66,10 +73,11 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 ```bash
 # Desde la terminal Linux (WSL)
-git --version          # git instalado
-ssh -T git@github.com  # conexión SSH a GitHub funcionando
-node --version         # node instalado vía nvm/fnm
-code .                 # VS Code abre el directorio actual
+git --version              # git instalado
+ssh -T git@github.com      # conexión SSH a GitHub funcionando
+docker --version           # Docker Desktop + WSL2
+node --version             # node instalado vía nvm/fnm
+code .                     # VS Code abre el directorio actual
 ```
 
 Si todos esos comandos funcionan → el entorno del tópico 2 está listo.
@@ -77,9 +85,10 @@ Si todos esos comandos funcionan → el entorno del tópico 2 está listo.
 ### Antes del tópico 6 (Bases de Datos)
 
 ```bash
-sudo service postgresql status   # PostgreSQL online
-mongosh --eval "db.runCommand({ ping: 1 })"   # MongoDB responde
-redis-cli ping                  # Redis responde PONG
+docker compose ps                   # servicios corriendo
+psql -h localhost -U dev -d fullstack_dev -c "SELECT 1"  # PostgreSQL
+mongosh --eval "db.runCommand({ ping: 1 })"              # MongoDB
+redis-cli ping                                           # Redis PONG
 ```
 
-Si los tres responden → el entorno de bases de datos está listo.
+Si los cuatro responden → el entorno de bases de datos está listo.

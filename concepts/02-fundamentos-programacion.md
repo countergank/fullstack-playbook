@@ -352,7 +352,88 @@ Debuggear es una habilidad, no un botón. El debugger es una herramienta, no un 
 
 ---
 
+## 2.6 Docker
+
+*En criollo:* Un contenedor es como una caja que contiene TODO lo que una aplicación necesita para correr: código, dependencias, configuración, y hasta el sistema operativo mínimo. A diferencia de una máquina virtual (que virtualiza hardware entero y pesa gigas), un contenedor comparte el kernel de tu máquina y solo empaqueta lo que realmente usa. Arranca en segundos, pesa megas, y corre igual en tu máquina, en la de tu compañero, y en producción.
+
+### Contenedor vs Máquina Virtual
+
+| | Contenedor (Docker) | Máquina Virtual (VirtualBox, VMware) |
+|---|---|---|
+| Arranque | Segundos | Minutos |
+| Tamaño | MB | GB |
+| Aislamiento | Proceso (comparte kernel) | Completo (kernel propio) |
+| Performance | Casi nativa | Overhead del hypervisor |
+| Uso típico | Una app por contenedor | Un sistema operativo completo |
+
+### Por qué Docker es FUNDAMENTAL para desarrollo
+
+- **"En mi máquina funciona" deja de existir**: el contenedor es idéntico en tu máquina, en staging y en producción.
+- **Bases de datos sin instalarlas nativo**: PostgreSQL, MongoDB, Redis corren en contenedores. No ensucian tu sistema, no tenés que configurar servicios. Un `docker compose up` y tenés todo corriendo.
+- **Un comando para levantar todo el stack**: frontend, backend, base de datos, Redis, todo en un `compose.yaml`.
+- **Paridad con producción**: si producción usa Docker (y el 90% de los deploys modernos sí), desarrollar en Docker significa que no hay sorpresas al deployar.
+
+### Imagen vs Contenedor
+
+- **Imagen**: el plano / receta. Define qué sistema operativo base, qué dependencias, qué archivos, qué comando ejecutar al arrancar. Es inmutable.
+- **Contenedor**: la instancia corriendo de una imagen. Podés tener 10 contenedores de la misma imagen de PostgreSQL, cada uno con sus propios datos.
+
+### Docker Compose — el orquestador de desarrollo
+
+```yaml
+# compose.yaml — define todos los servicios que necesita tu app
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: fullstack_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
+```
+
+```bash
+docker compose up -d    # levanta todo en background
+docker compose down     # apaga todo
+docker compose ps       # ver qué está corriendo
+```
+
+### Comandos esenciales
+
+```bash
+docker ps                    # contenedores corriendo
+docker compose up -d         # levantar servicios definidos en compose.yaml
+docker compose down          # apagar servicios
+docker compose logs -f       # ver logs en vivo de todos los servicios
+docker compose logs db       # logs solo de un servicio
+docker exec -it <id> bash    # entrar a la terminal de un contenedor
+docker system prune -a       # limpiar imágenes/vólumes no usados (liberar disco)
+```
+
+### Docker + WSL2
+
+En Windows, Docker Desktop usa WSL2 como backend. Los contenedores corren DENTRO de WSL2, no en Windows. Esto significa que:
+- Tenés rendimiento de Linux nativo.
+- Los archivos de tu proyecto en `~/` (dentro de WSL) se pueden montar en contenedores sin problemas de permisos.
+- La red de WSL2 expone los puertos de los contenedores automáticamente en `localhost`.
+
+> Guía de instalación: `guides/02-programming/setup-docker.md`
+
+---
+
 > **Check de comprensión**: 
 > 1. ¿Podés explicar la diferencia entre `git merge` y `git rebase`, y cuándo usarías cada uno?
 > 2. ¿Qué complejidad tiene buscar un elemento en un array con `find` vs en un `Map` con `.get()`?
 > 3. ¿Cuál es tu proceso paso a paso cuando encontrás un bug en producción?
+> 4. ¿Por qué una base de datos en un contenedor Docker es mejor que instalarla nativo en tu máquina para desarrollo?

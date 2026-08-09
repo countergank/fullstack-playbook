@@ -11,7 +11,7 @@ Arquitectura cliente-servidor, protocolo HTTP (métodos, headers, status codes),
 
 ## 2. Fundamentos de Programación
 
-Algoritmos, estructuras de datos, control de versiones (Git), terminal (incluye WSL), SSH, resolución de problemas, debugging.
+Algoritmos, estructuras de datos, control de versiones (Git), terminal (incluye WSL), SSH, Docker, resolución de problemas, debugging.
 
 ## 3. IA & Desarrollo Asistido
 
