@@ -1,24 +1,27 @@
 # 04 — Backend Core: Orden de Ejecución
 
-> ⚠️ **El orden importa.** Cada guía asume Docker ya instalado (guía 02).
+> ⚠️ **El orden importa.** Cada guía asume la anterior completada.
+
+## Prerequisito
+
+Antes de empezar, asegurate de tener Docker con las bases de datos corriendo (guías `06-databases`):
+
+```bash
+docker compose ps   # postgres, mongo y redis deben estar "Up"
+```
 
 ## Paso a paso
 
-1. **[setup-postgres.md](setup-postgres.md)** — PostgreSQL corriendo en Docker (o nativo WSL si preferís).
-2. **[setup-mongodb.md](setup-mongodb.md)** — MongoDB corriendo en Docker (o nativo WSL).
-3. **[setup-redis.md](setup-redis.md)** — Redis corriendo en Docker (o nativo WSL).
-
-> Las tres guías incluyen opciones para instalación nativa Y con Docker. Si ya completaste `setup-docker.md`, usar Docker es más simple: `docker compose up -d` y listo.
+1. **[setup-express-project.md](setup-express-project.md)** — Crear proyecto Express + TypeScript con estructura en capas, endpoint de prueba.
+2. **[setup-env-config.md](setup-env-config.md)** — Variables de entorno tipadas con Zod, `.env` + `.env.example`, fail-fast al arranque.
 
 ---
 
 ## Verificación final
 
 ```bash
-docker compose ps                        # los 3 servicios corriendo
-psql -h localhost -U dev -d fullstack_dev -c "SELECT version();"  # PostgreSQL
-mongosh --eval "db.runCommand({ ping: 1 })"                        # MongoDB
-redis-cli ping                                                      # Redis
+curl http://localhost:3000/health   # {"status":"ok"}
+npm run dev                          # arranca sin errores
 ```
 
-**Si los 3 responden → el entorno del tópico 4 está completo. ✅**
+**Si el endpoint de health responde y el server arranca → backend listo. ✅**

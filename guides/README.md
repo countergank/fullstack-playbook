@@ -61,9 +61,22 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 
 | Guía | Estado | Depende de |
 |------|--------|------------|
-| `04-backend/setup-postgres.md` | ✅ Lista | WSL, terminal |
-| `04-backend/setup-mongodb.md` | ✅ Lista | WSL, terminal |
-| `04-backend/setup-redis.md` | ✅ Lista | WSL, terminal |
+| `04-backend/setup-express-project.md` | ✅ Lista | Node, Docker, PostgreSQL |
+| `04-backend/setup-env-config.md` | ✅ Lista | Express project |
+
+### 05 — Frameworks Backend
+
+> 📋 Sin guías por ahora — el concept 05 cubre Express, NestJS, Fastify, Prisma, logging, queues.
+
+### 06 — Bases de Datos & Persistencia
+
+> 📋 Orden de ejecución: [`06-databases/README.md`](06-databases/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `06-databases/setup-postgres.md` | ✅ Lista | Docker |
+| `06-databases/setup-mongodb.md` | ✅ Lista | Docker |
+| `06-databases/setup-redis.md` | ✅ Lista | Docker |
 
 ---
 
@@ -85,10 +98,10 @@ Si todos esos comandos funcionan → el entorno del tópico 2 está listo.
 ### Antes del tópico 6 (Bases de Datos)
 
 ```bash
-docker compose ps                   # servicios corriendo
-psql -h localhost -U dev -d fullstack_dev -c "SELECT 1"  # PostgreSQL
-mongosh --eval "db.runCommand({ ping: 1 })"              # MongoDB
-redis-cli ping                                           # Redis PONG
+docker compose ps                                                     # los 3 "Up"
+docker compose exec db psql -U dev -d fullstack_dev -c "SELECT 1"      # PostgreSQL
+docker compose exec mongo mongosh --eval "db.runCommand({ ping: 1 })"   # MongoDB
+docker compose exec redis redis-cli ping                                # Redis
 ```
 
-Si los cuatro responden → el entorno de bases de datos está listo.
+Si los 3 responden → el entorno de bases de datos está listo.
