@@ -31,10 +31,26 @@ Docker, Node, PostgreSQL, Redis y prácticamente todas las herramientas de desar
 > ```
 > Reiniciar, luego `wsl --set-default-version 2`.
 
-### 3. Configurar tu distro
-- [ ] Ver distros disponibles: `wsl --list --online`
-- [ ] Instalar Ubuntu (o la que prefieras): `wsl --install -d Ubuntu`
+### 3. Instalar Ubuntu LTS (la última versión con soporte extendido)
+
+*En criollo:* Ubuntu tiene dos tipos de versiones: las **LTS** (Long Term Support, 5 años de actualizaciones de seguridad) y las intermedias (9 meses). Para desarrollo profesional, SIEMPRE usá LTS — no querés que tu entorno se quede sin soporte a los 9 meses.
+
+```powershell
+# Ver todas las distros disponibles (buscá las que dicen "LTS")
+wsl --list --online
+```
+
+- [ ] Buscá en la lista la versión más reciente que diga **LTS**. Ejemplos: `Ubuntu-24.04`, `Ubuntu-22.04`.
+- [ ] Instalar la última LTS disponible (reemplazá `Ubuntu-24.04` por la que corresponda):
+  ```powershell
+  wsl --install -d Ubuntu-24.04
+  ```
 - [ ] Al primer ingreso, crear **tu usuario** y contraseña (será tu usuario en Linux)
+- [ ] Si `wsl --install` ya te instaló una versión no-LTS, podés desinstalarla y reinstalar la LTS:
+  ```powershell
+  wsl --unregister Ubuntu
+  wsl --install -d Ubuntu-24.04
+  ```
 
 ### 4. Verificar que estés en WSL2 (no WSL1)
 ```bash
@@ -53,7 +69,7 @@ wsl --list --verbose
 ### 7. Entender el filesystem
 - [ ] Tus archivos Linux viven en `~/` (dentro de WSL)
 - [ ] Los discos de Windows se montan en `/mnt/c/`, `/mnt/d/`, etc.
-- [ ] Desde Windows, tu home Linux está en: `\\wsl$\Ubuntu\home\tu-usuario`
+- [ ] Desde Windows, tu home Linux está en: `\\wsl$\Ubuntu-24.04\home\tu-usuario` (ajustá el nombre según la distro que instalaste)
 - [ ] ⚠️ **Regla de oro**: trabajá en `~/` (Linux), no en `/mnt/c/` — es más rápido y no corrompe permisos
 
 ---
