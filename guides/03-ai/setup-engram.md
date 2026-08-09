@@ -14,44 +14,33 @@ Engram es una base de datos de memoria persistente que los agentes de IA consult
 
 ## Checklist
 
-### 1. Verificar que el plugin TUI de Engram está activo
-
-El plugin `opencode-sdd-engram-manage` es el que gestiona la instalación y activación de Engram desde la UI de OpenCode.
+### 1. Abrir la TUI de Gentle AI
 
 ```bash
-cat ~/.config/opencode/tui.json
+gentle-ai
 ```
-- [ ] Debe incluir `"opencode-sdd-engram-manage"` en la lista de plugins.
+- [ ] Se abre la interfaz TUI de Gentle AI. Desde acá podés instalar tanto Gentle AI como Engram.
 
-Si no está, agregalo:
-```json
-{
-  "$schema": "https://opencode.ai/tui.json",
-  "plugin": [
-    "opencode-subagent-statusline",
-    "opencode-sdd-engram-manage"
-  ],
-  "theme": "gentleman-kanagawa"
-}
-```
-Reiniciá OpenCode.
+### 2. Instalar Engram desde la TUI
 
-### 2. Instalar/activar Engram desde la TUI
+Dentro de la TUI de `gentle-ai`:
+1. Navegá a la sección de instalación/gestión de componentes (buscá opciones como "Install", "Setup" o "Engram")
+2. Seleccioná la opción para **instalar / activar Engram**
+3. La TUI se encarga de:
+   - Registrar Engram como servidor MCP en `~/.config/opencode/opencode.json`
+   - Activar el plugin `opencode-sdd-engram-manage` en `~/.config/opencode/tui.json`
+   - Arrancar el servidor Engram
 
-1. Abrí OpenCode: `opencode`
-2. Buscá el panel o menú de plugins TUI (depende de tu tema, generalmente en la barra lateral o con un atajo como `Ctrl+E` o `Ctrl+P` → "Engram")
-3. Seleccioná la opción para **instalar / activar Engram** que provee el plugin `opencode-sdd-engram-manage`
-4. El plugin se encarga de registrar Engram como servidor MCP en `opencode.json` y arrancarlo
-
-> Si el plugin ofrece opciones como "Enable Engram", "Start Engram", o "Connect Engram" — seleccionalas en orden.
+> Si la TUI ofrece opciones como "Enable Engram", "Start Engram", o "Connect Engram" — seleccionalas en orden.
 
 ### 3. Verificar que Engram está activo
 
-Una vez instalado, el plugin muestra un indicador de estado. Verificá de dos formas:
+Una vez instalado desde la TUI, verificá de dos formas:
 
-**Desde la TUI:** el statusline (provisto por `opencode-subagent-statusline`) debería mostrar un ícono o texto indicando que Engram está conectado.
+**Desde la TUI:** el statusline debería mostrar un indicador de que Engram está conectado.
 
-**Desde el agente (la verificación definitiva):** dentro de OpenCode, preguntá algo que requiera memoria:
+**Desde OpenCode (la verificación definitiva):** abrí OpenCode y preguntá algo que requiera memoria:
+
 ```
 ¿Qué proyecto estoy usando ahora?
 ```
@@ -96,9 +85,9 @@ Dentro de OpenCode, ejecutá estas dos pruebas:
 
 | Problema | Solución |
 |----------|----------|
-| El plugin `opencode-sdd-engram-manage` no aparece | Verificar `tui.json`. Si no existe, crearlo con el contenido del paso 1 |
+| `gentle-ai` no abre la TUI | Verificar que `gentle-ai` está instalado (`setup-gentle-ai.md`). Ejecutar `gentle-ai --version` |
+| La TUI no muestra opción de Engram | Puede que ya esté instalado. Verificar: `grep -o '"engram"' ~/.config/opencode/opencode.json` |
 | El agente no llama a `mem_save` | Es normal si no detecta decisiones nuevas. Forzá un save manual como en el paso 4 |
-| Engram aparece como "disconnected" en el statusline | Reinstalar desde el plugin TUI. Si persiste, verificar que `engram` esté en la sección `mcp` de `opencode.json` |
 | `mem_search` no encuentra nada | Primera sesión = sin historial. Los saves se acumulan con el uso |
 | Memoria entre proyectos se mezcla | Los agentes usan `project` para filtrar. Si cambiás de proyecto, usá `mem_current_project` para verificar el contexto |
 
@@ -107,4 +96,4 @@ Dentro de OpenCode, ejecutá estas dos pruebas:
 ## Recursos
 
 - [Engram — GitHub](https://github.com/gentleman-programming/engram)
-- [Gentle AI — TUI Plugins](https://github.com/gentleman-programming/gentle-ai)
+- [Gentle AI — CLI + TUI](https://github.com/gentleman-programming/gentle-ai)
