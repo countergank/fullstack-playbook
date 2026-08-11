@@ -109,6 +109,33 @@ docker compose exec redis redis-cli get test    # "1"
 
 ---
 
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| Puerto 6379 ocupado | Otra instancia de Redis corriendo. `docker compose down`, cambiar `ports: - "6380:6379"` |
+| "Connection refused" desde Node | Contenedor no está corriendo: `docker compose up -d redis` |
+| Datos se pierden al reiniciar | Agregar `volumes:` como en el paso 1. Sin volumen, los datos mueren con el contenedor |
+| Redis rechaza writes con "OOM command not allowed" | Memoria llena con política `noeviction`. Configurá `maxmemory-policy allkeys-lru` o aumentá `maxmemory` |
+| `MONITOR` ralentiza Redis | MONITOR imprime cada comando en stdout — usalo solo para debug breve, no en producción |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Qué devuelve `redis-cli ping` cuando Redis está funcionando correctamente?
+  **R:** `PONG`.
+- **P:** ¿Cómo configurás una key con expiración de 5 minutos en Redis?
+  **R:** `SET key valor EX 300` (300 segundos = 5 minutos).
+- **P:** ¿Qué patrón de caché usa el ejemplo de `getUser()` en la guía?
+  **R:** Cache-aside: lee caché primero, si miss lee DB y pobla caché.
+- **P:** ¿Qué comando usás para ver todos los comandos Redis en vivo (modo debug)?
+  **R:** `redis-cli MONITOR`.
+- **P:** ¿Por qué Redis es single-threaded y qué ventaja tiene eso?
+  **R:** Porque un solo thread procesa comandos secuencialmente, eliminando race conditions sin necesidad de locks.
+
+---
+
 ## Recursos
 
 - [Redis Docker Image](https://hub.docker.com/_/redis)

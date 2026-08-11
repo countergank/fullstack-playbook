@@ -82,6 +82,21 @@ SELECT version();
 
 ---
 
+## Preguntas de repaso
+
+- **P:** ¿Qué datos de conexión usás en DBeaver para PostgreSQL en Docker?
+  **R:** Host: `localhost`, Port: `5432`, Database: `fullstack_dev`, Username: `dev`, Password: `dev`.
+- **P:** ¿Por qué debés desactivar SSL en las Driver properties al conectar a Docker local?
+  **R:** Porque el contenedor Docker de PostgreSQL no está configurado con SSL por defecto. Intentar conectar con SSL causa error de handshake.
+- **P:** ¿Cómo ejecutás una query SQL en DBeaver?
+  **R:** Clic derecho sobre la conexión → Herramientas SQL → Abrir consola SQL, escribir la query y ejecutar con Ctrl+Enter.
+- **P:** ¿Qué tabla especial crea Prisma automáticamente y para qué sirve?
+  **R:** `_prisma_migrations`, que trackea el historial de migrations aplicadas con su nombre, checksum y fecha de ejecución.
+- **P:** ¿Qué ventaja tiene DBeaver sobre Prisma Studio?
+  **R:** DBeaver muestra la base de datos real sin abstracciones del ORM, soporta múltiples motores SQL, y tiene editor SQL completo con autocompletado.
+
+---
+
 ## Recursos
 
 - [DBeaver — Download](https://dbeaver.io/download/)

@@ -84,6 +84,21 @@ Abrí Compass y conectá a `mongodb://localhost:27017/fullstack_dev`.
 
 ---
 
+## Preguntas de repaso
+
+- **P:** ¿Cuál es la URI de conexión para MongoDB Compass con el compose de esta guía?
+  **R:** `mongodb://localhost:27017/fullstack_dev`.
+- **P:** ¿Por qué Compass no pide usuario ni password con esta configuración?
+  **R:** Porque el `compose.yaml` no define variables de autenticación (`MONGO_INITDB_ROOT_USERNAME`, etc.), así que MongoDB arranca sin auth.
+- **P:** ¿Cómo insertás un documento manualmente desde Compass?
+  **R:** Clic en la colección → Add Data → Insert Document, escribir el JSON y darle Insert.
+- **P:** ¿Qué ventaja tiene la pestaña Aggregations de Compass sobre escribir el pipeline en código?
+  **R:** Permite armar el pipeline stage por stage con feedback visual inmediato, viendo el resultado de cada stage antes de agregar el siguiente.
+- **P:** ¿Por qué la base `fullstack_dev` puede no aparecer en Compass hasta que insertes el primer documento?
+  **R:** Porque MongoDB crea las bases de datos de forma lazy: la base no existe físicamente hasta que se inserta el primer documento en ella.
+
+---
+
 ## Recursos
 
 - [MongoDB Compass](https://www.mongodb.com/products/tools/compass)
