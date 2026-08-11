@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué validar variables de entorno al arranque?
+
+Las variables de entorno son la configuración que tu app necesita para funcionar: puerto, URL de la base de datos, secretos. Si una variable falta o tiene un valor inválido, tu app va a fallar — la pregunta es CUÁNDO. Sin validación, el error aparece en el peor momento: cuando un usuario hace un request y el server crashea con un `Cannot read property of undefined`. Con validación al arranque (fail-fast), el error aparece ANTES de recibir tráfico, en la terminal del dev o en los logs del deploy. Es infinitamente mejor que el server no arranque a que arranque y falle silenciosamente.
+
+---
+
 ## Checklist
 
 ### 1. Crear `.env` y `.env.example`
@@ -108,3 +114,34 @@ npm run dev   # debe mostrar "Invalid environment variables" y NO arrancar
 
 - [dotenv](https://github.com/motdotla/dotenv)
 - [Zod](https://zod.dev/)
+
+---
+
+## Problemas comunes
+
+| Problema | Causa | Solución |
+|---|---|---|
+| `Cannot read property of undefined` al usar `process.env` | No estás usando el objeto `env` tipado | Importá `env` desde `./config/env.js` y usá `env.PORT` en vez de `process.env.PORT` |
+| El server arranca pero `DATABASE_URL` es `undefined` | Falta la variable en `.env` o el schema de Zod no la declaró | Verificá que la variable esté en `.env` y que `envSchema` la incluya con `z.string()` |
+| `JWT_SECRET` muy corto, Zod lo rechaza | `.min(32)` en el schema exige mínimo 32 caracteres | Generá un nuevo secreto con `openssl rand -hex 64` y actualizá `.env` |
+| `.env` se subió al repo por accidente | `.gitignore` no incluye `.env` o se commiteó antes de agregarlo | Agregá `.env` al `.gitignore`, ejecutá `git rm --cached .env`, rotá todos los secretos |
+| Error de tipo en `env.PORT` (string vs number) | `z.coerce.number()` convierte automáticamente, pero si falla tira error | Usá `z.coerce.number().int().default(3000)` para tener un fallback seguro |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué es mejor que el server FALLE al arrancar en vez de fallar cuando un usuario hace un request?
+**R:** Porque un error al arrancar (fail-fast) te avisa inmediatamente en la terminal o en los logs del deploy, antes de recibir tráfico. Si falla en runtime con un request real, el usuario ve un error 500 y vos te enterás por los logs de producción, posiblemente cuando ya hay varios usuarios afectados. Es el principio de "fallá temprano, fallá fuerte".
+
+- **P:** ¿Qué diferencia hay entre `.env` y `.env.example`? ¿Cuál se commitea y por qué?
+**R:** `.env` contiene valores reales (secretos, contraseñas) y NUNCA se commitea. `.env.example` es una plantilla con valores de ejemplo que SÍ se commitea para que otros devs sepan qué variables necesita el proyecto sin exponer secretos reales.
+
+- **P:** ¿Qué ventaja tiene usar Zod para validar variables de entorno en vez de chequear `if (!process.env.DATABASE_URL) throw...`?
+**R:** Zod te da: (1) validación tipada — `DATABASE_URL` se infiere como `string` (no `string | undefined`), (2) mensajes de error claros y agrupados (`.flatten().fieldErrors`), (3) coerciones automáticas (`z.coerce.number()`), (4) valores por defecto (`.default()`), y (5) un schema declarativo que sirve como documentación viva de lo que tu app necesita.
+
+- **P:** Si necesitás agregar una nueva variable de entorno `REDIS_URL` a un proyecto existente, ¿qué archivos tenés que tocar?
+**R:** Cuatro: (1) `.env` — agregar el valor real, (2) `.env.example` — agregar un valor de ejemplo, (3) `src/config/env.ts` — agregar `REDIS_URL: z.string().url()` al schema de Zod, (4) buscar `process.env.REDIS_URL` en el código y reemplazar por `env.REDIS_URL`.
+
+- **P:** ¿Por qué el JWT_SECRET debería tener al menos 32 caracteres? ¿Qué pasa si es más corto?
+**R:** Porque la seguridad del JWT depende de la entropía del secreto. Un secreto corto (ej. "secreto123") es vulnerable a ataques de fuerza bruta: un atacante puede probar combinaciones hasta encontrar la que valida tus tokens. 32 caracteres hexadecimales (128 bits de entropía) hacen que el espacio de búsqueda sea astronómicamente grande (~3.4 × 10³⁸ combinaciones), haciendo el ataque inviable.
