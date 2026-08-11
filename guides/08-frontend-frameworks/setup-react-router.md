@@ -239,3 +239,23 @@ npm run dev         # http://localhost:5173
 - [React Router — Route](https://reactrouter.com/api/components/Route)
 - [React Router — useParams](https://reactrouter.com/api/hooks/useParams)
 - [React Router — useNavigate](https://reactrouter.com/api/hooks/useNavigate)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué una SPA necesita un router si solo tiene una página HTML?
+  **R:** Porque "navegar" en una SPA es cambiar qué componente se muestra según la URL. El router observa la URL, decide qué renderizar, y actualiza el historial para que back/forward funcionen.
+
+- **P:** ¿Qué diferencia hay entre `<Link>` y `<a href>` en una SPA?
+  **R:** `<Link>` intercepta el clic y cambia la URL sin recargar (usa `pushState`). `<a href>` recarga toda la página y mata el estado React.
+
+- **P:** ¿Cómo leés un parámetro dinámico como `:id` de la URL?
+  **R:** Con `useParams()` que devuelve un objeto con las claves del path. Para `/users/3`, `useParams()` devuelve `{ id: "3" }`.
+
+- **P:** ¿Cuándo usás `useNavigate()` en vez de `<Link>`?
+  **R:** `useNavigate()` para redirecciones programáticas después de lógica (login exitoso, submit de formulario). `<Link>` para links normales de navegación en la UI.
+
+- **P:** ¿Qué hace la ruta `path="*"` y por qué debe ir al final?
+  **R:** Es un catch-all para URLs que no matchean ninguna ruta anterior (404). Debe ir al final porque `Routes` renderiza la PRIMERA que matchea; si va antes, captura todo.
+
+- **P:** ¿Por qué el efecto de fetch en `UserDetail` depende de `[id]`?
+  **R:** Porque cuando navegás de `/users/3` a `/users/9`, el `id` cambia y el efecto debe re-ejecutarse para fetchear el usuario correcto. Sin `[id]` en las deps, no re-fetchea.

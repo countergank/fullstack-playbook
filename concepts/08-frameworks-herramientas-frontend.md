@@ -8,6 +8,10 @@
 
 *En criollo:* React resuelve el problema del concept 7.5: manipular el DOM a mano es tedioso, lento y lleno de bugs. Con React **declarás** qué se ve ("si el usuario está logueado, mostrá su avatar") y React se encarga de reconciliar el DOM real con lo que dijiste. Vos no tocás el DOM — React lo hace por vos.
 
+*Técnicamente:* React mantiene un **Virtual DOM** (un árbol de objetos JS que replica la estructura del DOM real). Cuando el estado cambia, React ejecuta el algoritmo de **reconciliation** (diffing) entre el árbol anterior y el nuevo, calcula el mínimo conjunto de mutaciones necesarias, y las aplica en batch al DOM real. Desde React 18, el scheduler usa **Fiber** (linked-list de work units) para poder pausar, priorizar y reanudar renders — esto habilita `useTransition` y `useDeferredValue`. → [React — What is React?](https://react.dev/learn/describing-the-ui) | → [React — Render and Commit](https://react.dev/learn/render-and-commit)
+
+→ Ver [Tópico 7: Frontend Core](../concepts/07-frontend-core.md#7.5-dom) para el problema que React resuelve. → Ver [Tópico 10: Testing](../concepts/10-testing.md#10.3-testing-de-componentes) para cómo testear componentes React.
+
 ### Componentes: la unidad base
 
 Un componente es una función que recibe **props** (inputs) y devuelve **JSX** (el "HTML" de React). Componentes chicos y reutilizables es la idea central.
@@ -157,11 +161,31 @@ function TodoItem({ todo, onToggle }: { todo: Todo; onToggle: (id: number) => vo
 }
 ```
 
+> **Check de comprensión**
+> 1. ¿Qué problema resuelve React respecto a manipular el DOM a mano?
+>    - R: Evita la manipulación imperativa del DOM; declarás qué querés ver y React reconcilia el Virtual DOM con el real aplicando solo los cambios necesarios.
+> 2. ¿Qué son las Rules of Hooks y por qué existen?
+>    - R: Hooks solo al nivel superior del componente y solo en componentes/custom hooks. Existen porque React depende del orden de llamada para asociar cada hook con su estado interno (Fiber).
+> 3. ¿Cuándo usás `useEffect` vs cuándo NO?
+>    - R: Usás `useEffect` para efectos secundarios (fetch, timers, suscripciones, sincronizar con APIs externas). NO lo usás para transformar datos derivados de props/estado (eso es `useMemo` o cálculo directo).
+> 4. ¿Qué diferencia hay entre `useRef` y `useState` en términos de re-render?
+>    - R: `useRef` es mutable pero cambiar `.current` NO dispara re-render. `useState` sí dispara re-render cuando cambia. Usás `useRef` para valores que no necesitan actualizar la UI.
+> 5. ¿Por qué `useMemo` y `useCallback` no deben usarse en todo?
+>    - R: Memorizar también tiene costo (allocación, comparación de deps). Solo conviene cuando el cálculo es pesado o el hijo está memoizado con `React.memo`. Primero medí, después optimizá.
+> 6. ¿Qué hace `useReducer` y cuándo gana sobre `useState`?
+>    - R: Maneja estado complejo con una función pura `(state, action) → newState`. Gana cuando el estado tiene varias piezas que cambian juntas o transiciones predecibles (formularios, carritos).
+> 7. ¿Qué significa que las props fluyen unidireccionalmente?
+>    - R: Los datos van de padre a hijo; para comunicar cambios hacia arriba el hijo recibe un callback como prop y lo invoca. No hay "binding bidireccional" como en otros frameworks.
+
 ---
 
 ## 8.2 Manejo de Estado
 
 *En criollo:* A medida que la app crece, el estado deja de ser local de un componente. "¿Quién está logueado?", "¿qué hay en el carrito?" — datos que MUCHOS componentes necesitan. Esos no van en un `useState` por componente: van afuera.
+
+*Técnicamente:* React Context usa el **Context API** interno: al llamar `useContext(ThemeContext)`, el componente se suscribe al Provider más cercano en el árbol. Cuando el `value` del Provider cambia, React marca TODOS los suscriptores como dirty y los re-renderiza en el próximo ciclo. Esto es O(n) respecto a los consumidores — por eso Context es ideal para datos que cambian poco (tema, auth) y no para datos frecuentes (input text, scroll position). Zustand, en cambio, usa un store externo con **selectores finos**: cada componente se suscribe solo al slice que le interesa, evitando re-renders innecesarios. → [React — Context](https://react.dev/learn/passing-data-deeply-with-context) | → [Zustand — Introduction](https://zustand.docs.pmnd.rs/getting-started/introduction)
+
+→ Ver [Tópico 7: Frontend Core](../concepts/07-frontend-core.md#7.4-typescript) para el tipado de props y estado. → Ver [Tópico 8.1: React Hooks](../concepts/08-frameworks-herramientas-frontend.md#8.1-react--el-framework-de-ui) para `useState` y `useReducer` como base del estado local.
 
 | Herramienta | Estado resuelve | Cuándo usarla |
 |-------------|----------------|---------------|
@@ -191,11 +215,27 @@ function Header() {
 
 > **Regla de oro**: Context provoca re-render de TODOS los consumidores cuando cambia. No metas cosas que cambian constantemente (el texto de un input) en Context — para eso está el estado local.
 
+> **Check de comprensión**
+> 1. ¿Qué problema resuelve el manejo de estado global?
+>    - R: Evita el prop drilling (pasar datos por muchos niveles) y centraliza datos que múltiples componentes necesitan (usuario logueado, tema, carrito).
+> 2. ¿Cuándo usás React Context y cuándo Zustand?
+>    - R: Context para datos globales de lectura que cambian poco (tema, idioma). Zustand para estado con lógica, acciones y updates frecuentes (carrito, sesión compleja).
+> 3. ¿Por qué no conviene meter datos que cambian constantemente en Context?
+>    - R: Porque cada cambio de value en el Provider re-renderiza TODOS los consumidores, lo que degrada performance.
+> 4. ¿Qué ventaja tiene Zustand sobre Context en términos de re-render?
+>    - R: Zustand usa selectores finos: cada componente se suscribe solo al slice del estado que necesita, evitando re-renders innecesarios.
+> 5. ¿Qué es prop drilling y por qué es un problema?
+>    - R: Pasar props por muchos niveles de componentes intermedios que no las usan. Hace el código ilegible y difícil de mantener.
+
 ---
 
 ## 8.3 Routing
 
 *En criollo:* Una SPA tiene UNA página HTML. "Navegar" es cambiar qué componente se muestra según la URL. El router es quien observa la URL, decide qué renderizar, y reescribe el historial del navegador (para que back/forward funcionen).
+
+*Técnicamente:* React Router usa la **History API** del navegador (`pushState`, `replaceState`, evento `popstate`). `BrowserRouter` escucha cambios de URL y renderiza el `<Route>` que matchea. Los `<Link>` interceptan el evento `click` del `<a>`, llaman a `event.preventDefault()`, y usan `history.pushState` para cambiar la URL sin recargar. El parámetro `:id` se parsea del path y se expone via `useParams()`. → [React Router — Getting Started](https://reactrouter.com/start/framework/installation) | → [MDN — History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
+
+→ Ver [Tópico 1: Fundamentos Web](../concepts/01-fundamentos-web.md#1.4-navegadores) para cómo el navegador maneja URLs y el historial. → Ver [Tópico 8.6: Next.js](../concepts/08-frameworks-herramientas-frontend.md#8.6-nextjs--el-framework-full-stack-de-react) para routing por archivos vs routing declarativo.
 
 ### React Router — el estándar
 
@@ -238,11 +278,29 @@ function UserDetail() {
 
 > **Detalle**: `<Link>` para links, `useNavigate` para redirecciones después de lógica (login, submit). Nunca uses `<a href>` crudo dentro de una SPA — recarga la página entera y mata el estado.
 
+> **Check de comprensión**
+> 1. ¿Cómo "navega" una SPA si solo tiene una página HTML?
+>    - R: El router observa la URL, renderiza el componente correspondiente, y reescribe el historial con la History API para que back/forward funcionen.
+> 2. ¿Qué diferencia hay entre `<Link>` y `<a href>` en una SPA?
+>    - R: `<Link>` intercepta el clic y cambia la URL sin recargar (usa `pushState`). `<a href>` recarga toda la página y pierde el estado React.
+> 3. ¿Cuándo usás `<Link>` vs `useNavigate()`?
+>    - R: `<Link>` para navegación declarativa (links en la UI). `useNavigate()` para redirecciones programáticas después de lógica (login exitoso, submit de formulario).
+> 4. ¿Cómo leés un parámetro dinámico como `:id` de la URL?
+>    - R: Con `useParams()` que devuelve un objeto con las claves declaradas en el path (ej: `{ id: "3" }` para `/users/3`).
+> 5. ¿Qué hace la ruta `path="*"` en React Router?
+>    - R: Es un catch-all: matchea cualquier URL que no haya matcheado ninguna ruta anterior. Se usa para la página 404.
+> 6. ¿Por qué el orden de las `<Route>` importa?
+>    - R: `Routes` renderiza la PRIMERA que matchea. Si ponés `*` antes que otras rutas, siempre cae en el 404.
+
 ---
 
 ## 8.4 Vite — El Bundler y Dev Server Moderno
 
 *En criollo:* Antes (Webpack), cada cambio en un archivo re-empaquetaba todo el proyecto: segundos (a veces minutos) de espera por cada save. Vite rompió eso: en dev NO bundlea — sirve los ES modules nativos del navegador como están. El servidor arranca al instante y el Hot Module Replacement (HMR) actualiza SOLO el módulo que cambió, sin recargar la página y sin perder el estado.
+
+*Técnicamente:* Vite usa **ES modules nativos** del navegador en desarrollo: cada `import` se resuelve on-demand via HTTP, sin bundling previo. El dev server intercepta requests, transforma TS/JSX al vuelo con **esbuild** (escrito en Go, ~10-100x más rápido que babel/webpack), y sirve el resultado. En producción, usa **Rolldown** (Rust) para generar bundles optimizados con code-splitting y tree-shaking. HMR funciona via WebSocket: el server notifica al browser qué módulo cambió, y el browser lo re-importa sin reload. → [Vite — Why Vite](https://vite.dev/guide/why.html) | → [Vite — Features](https://vite.dev/guide/features.html)
+
+→ Ver [Tópico 2: Fundamentos de Programación](../concepts/02-fundamentos-programacion.md#2.7-terminal) para el entorno donde corren los comandos de build. → Ver [Tópico 9: DevOps](../concepts/09-devops-deployment.md#9.1-docker) para cómo se deploya el `dist/` que genera Vite.
 
 ### Por qué Vite gana
 
@@ -280,11 +338,29 @@ mi-app/
 
 > Ojo: `npm run build` genera `dist/` — eso es lo que deployment sirve (tópico 9). Vite en dev está pensado para el developer; el build para el usuario final.
 
+> **Check de comprensión**
+> 1. ¿Por qué Vite es tan rápido en dev comparado con Webpack?
+>    - R: Vite sirve ES modules nativos on-demand sin bundlear; Webpack re-bundlea todo el graph en cada cambio. esbuild (Go) transforma al vuelo ~10-100x más rápido.
+> 2. ¿Qué es HMR y por qué es mejor que recargar la página?
+>    - R: Hot Module Replacement actualiza solo el módulo cambiado via WebSocket, sin recargar. Mantiene el estado de la app (formularios, navegación) intacto.
+> 3. ¿Qué usa Vite para el build de producción y por qué?
+>    - R: Rolldown (Rust) para bundles optimizados con tree-shaking y code-splitting. En producción necesitás un solo bundle o pocos chunks, no cientos de ES modules.
+> 4. ¿Qué genera `npm create vite` y por qué importa la estructura?
+>    - R: Un proyecto con `index.html` (única página), `src/main.tsx` (entry), `src/App.tsx` (componente raíz), y `vite.config.ts` (config). Es la base que usan todas las guías siguientes.
+> 5. ¿Qué diferencia hay entre `npm run dev` y `npm run build`?
+>    - R: `dev` levanta el servidor con HMR para desarrollo. `build` genera archivos optimizados en `dist/` para producción (servidos por un servidor estático).
+> 6. ¿Para qué sirve `npm run preview`?
+>    - R: Sirve localmente el build de producción (`dist/`) para verificar que funciona antes de deployar. No es el dev server — es el build real.
+
 ---
 
 ## 8.5 Vitest — Testing de Componentes
 
 *En criollo:* Vitest es el framework de testing "nativo" de Vite: comparte la misma config, el mismo transform y la misma velocidad. Es la evolución natural de Jest — la API es la misma (`describe`, `test`, `expect`), pero corre sobre la infraestructura de Vite. Por eso el tópico 10 (Testing) lo tiene como opción principal para frontend.
+
+*Técnicamente:* Vitest reutiliza el **pipeline de transformación de Vite**: el mismo plugin de React/TS que transforma tu app transforma tus tests. No necesita configuración extra para JSX o TS. En modo watch, usa **invalidation graphs** para re-correr solo los tests afectados por un cambio. `jsdom` simula la API del DOM en Node (sin navegador real); el browser mode corre tests en un navegador real via Playwright. → [Vitest — Getting Started](https://vitest.dev/guide/) | → [Testing Library — React](https://testing-library.com/docs/react-testing-library/intro)
+
+→ Ver [Tópico 10: Testing](../concepts/10-testing.md#10.1-unit-tests) para los fundamentos de testing que Vitest implementa. → Ver [Tópico 8.4: Vite](../concepts/08-frameworks-herramientas-frontend.md#8.4-vite--el-bundler-y-dev-server-moderno) para la infraestructura que Vitest comparte.
 
 ### Instalar y el primer test
 
@@ -335,11 +411,29 @@ test('el botón incrementa el contador', async () => {
 
 > **Nota**: para correr componentes en jsdom, definís `environment: 'jsdom'` en `vitest.config.ts` (o docblock `@jest-environment jsdom` por archivo). Sin eso, un componente con DOM falla.
 
+> **Check de comprensión**
+> 1. ¿Por qué Vitest se siente "nativo" con Vite?
+>    - R: Comparte el mismo pipeline de transformación, la misma config y los mismos plugins. No necesita configuración extra para JSX o TypeScript.
+> 2. ¿Qué diferencia hay entre `vitest` y `vitest run`?
+>    - R: `vitest` corre en watch mode (escucha cambios y re-corre). `vitest run` hace una sola pasada y termina — ideal para CI.
+> 3. ¿Para qué sirve jsdom y cuándo lo necesitás?
+>    - R: Simula la API del DOM en Node. Lo necesitás cuando testeás componentes React que interactúan con el DOM (render, clicks, queries).
+> 4. ¿Qué principio sigue Testing Library al testear componentes?
+>    - R: Testear como un usuario real: buscar por rol y texto visible, no por clases CSS internas o implementación.
+> 5. ¿Qué hace `vi.fn()` en un test?
+>    - R: Crea una función espía (mock) que registra cuántas veces fue llamada y con qué argumentos. Sirve para verificar que callbacks se disparan correctamente.
+> 6. ¿Cuándo usarías el browser mode de Vitest en vez de jsdom?
+>    - R: Cuando necesitás un navegador real: layout/estilos reales, interacción compleja, o APIs que jsdom no soporta (Canvas, WebGL).
+
 ---
 
 ## 8.6 Next.js — El Framework Full-Stack de React
 
 *En criollo:* React solo es una librería de UI que corre en el cliente. La página llega vacía y React llena el DOM en el navegador (CSR). Next.js agrega lo que falta para apps serias: renderizado en el servidor, routing por archivos, API routes, SEO. Es el framework más usado de React — el 90% de los proyectos profesionales nuevos usan Next.
+
+*Técnicamente:* Next.js implementa **Server Components** (RSC): componentes que corren en el servidor y envían un serializado (no HTML, no JSON) al cliente. El cliente hidrata solo los Client Components (`'use client'`). El App Router usa **file-based routing**: cada `page.tsx` en `app/` es una ruta. Next soporta CSR, SSR (render por request), SSG (render en build), e ISR (revalidate periódico). El streaming SSR envía HTML en chunks para que el usuario vea contenido antes de que todo esté listo. → [Next.js — Getting Started](https://nextjs.org/docs/app/getting-started) | → [React — Server Components](https://react.dev/reference/rsc/server-components)
+
+→ Ver [Tópico 4: Backend Core](../concepts/04-backend-core.md#4.2-apis-rest) para entender por qué los Server Components pueden leer la DB directo sin API intermedia. → Ver [Tópico 8.3: Routing](../concepts/08-frameworks-herramientas-frontend.md#8.3-routing) para la diferencia entre routing declarativo (React Router) y por archivos (Next.js).
 
 ### CSR vs SSR vs SSG — el espectro de renderizado
 
@@ -380,11 +474,29 @@ export default async function UsersPage() {
 
 > **Regla práctica**: default server; marcá `'use client'` SOLO cuando necesitás interactividad (estado, eventos).
 
+> **Check de comprensión**
+> 1. ¿Qué agrega Next.js que React solo no tiene?
+>    - R: Renderizado en servidor (SSR/SSG), routing por archivos, API routes, SEO optimizado, y Server Components. React solo es CSR (cliente).
+> 2. ¿Qué diferencia hay entre CSR, SSR y SSG?
+>    - R: CSR renderiza en el navegador (lento, mal SEO). SSR renderiza en el servidor en cada request (rápido, buen SEO). SSG genera HTML estático en build (instantáneo, ideal para contenido fijo).
+> 3. ¿Qué es un Server Component y qué NO puede hacer?
+>    - R: Un componente que corre en el servidor, puede ser async y leer datos directo. NO puede usar hooks (`useState`, `useEffect`) ni eventos (`onClick`).
+> 4. ¿Cuándo marcás un componente con `'use client'`?
+>    - R: Solo cuando necesitás interactividad: estado local, efectos, o eventos de usuario. El default es server component.
+> 5. ¿Cómo funciona el routing en Next.js App Router?
+>    - R: Por archivos: cada `page.tsx` en una carpeta de `app/` es una URL. `layout.tsx` es compartido. `[id]` es un segmento dinámico.
+> 6. ¿Qué ventaja tiene que un Server Component pueda leer la DB directo?
+>    - R: Elimina la necesidad de una API route intermedia: el servidor hace el query y envía el HTML ya con los datos. Menos latencia, menos código.
+
 ---
 
 ## 8.7 Sistemas de Estilos
 
 *En criollo:* En el concept 7.2 viste CSS puro. En una app React, el CSS necesita resolvers: cómo escopar los estilos por componente, cómo evitar conflictos de nombres, cómo no repetir. Acá están las tres estrategias que dominan el mercado — cada una es una filosofía distinta.
+
+*Técnicamente:* **CSS Modules** transforma cada clase en un identificador único (hash) en build time: `.card` → `UserCard_card__x7k2m`. El CSS se scropea por archivo. **Tailwind** usa un parser JIT (Just-In-Time) que escanea tu código y genera solo las clases utilitarias que usás — el CSS final es mínimo porque purga las no usadas. **styled-components** genera `<style>` tags dinámicos en runtime: cada componente inyecta sus reglas con clases únicas, y las props se interpolan en template literals. → [CSS Modules — spec](https://github.com/css-modules/css-modules) | → [Tailwind — Utility-First](https://tailwindcss.com/docs/utility-first) | → [styled-components — Basics](https://styled-components.com/docs/basics)
+
+→ Ver [Tópico 7: Frontend Core](../concepts/07-frontend-core.md#7.2-css-moderno) para los fundamentos de CSS que estos sistemas extienden. → Ver [Tópico 8.4: Vite](../concepts/08-frameworks-herramientas-frontend.md#8.4-vite--el-bundler-y-dev-server-moderno) para cómo Vite procesa CSS Modules nativamente.
 
 ### CSS Modules — el clásico silencioso
 
@@ -447,14 +559,16 @@ function App() {
 
 > **Regla de oro**: cualquiera de las tres es válida; lo NO negociable es consistencia dentro del equipo. Elegí UNA y mantenela.
 
----
-
-> **Check de comprensión**:
-> 1. ¿Por qué Vite es tan rápido en dev mientras Webpack no? ¿Qué pasa exactamente cuando editás un archivo?
-> 2. ¿Cuál es la diferencia entre `useState` y React Context? ¿Cuándo usarías Zustand además?
-> 3. Una SPA tiene una sola página HTML — ¿cómo "navega" entonces? ¿Qué hace el router?
-> 4. ¿En qué se diferencia un Server Component de un Client Component en Next.js? ¿Cómo decidís cuál usar?
-> 5. ¿Por qué Vitest se siente nativo con Vite? ¿Qué hace `vitest run` distinto de `vitest`?
-> 6. ¿Qué problema resuelven los tres sistemas de estilos? ¿Cuál elegirías para un proyecto nuevo y por qué?
-> 7. ¿Qué pasa si ponés `useEffect` sin array de deps? ¿Y con `[]` pero usando un valor que cambia? ¿En qué se diferencia `useRef` de `useState`?
-> 8. Tenés una lista de 10.000 items que se filtra en cada render — ¿qué hook usás y por qué?
+> **Check de comprensión**
+> 1. ¿Qué problema resuelven los sistemas de estilos en React?
+>    - R: El CSS puro tiene nombres de clase globales que se pisan. Los sistemas de estilos resuelven el escopeo: CSS Modules con hash, Tailwind con convención utility-first, styled-components con clases únicas por componente.
+> 2. ¿Cómo funciona CSS Modules para evitar conflictos de nombres?
+>    - R: Hashea cada clase en build time: `.card` se convierte en algo como `Button_card__x7k2m`. Cada archivo tiene su propio namespace.
+> 3. ¿Qué es Tailwind y por qué el bundle final es mínimo?
+>    - R: Es un framework utility-first: usás clases predefinidas directo en el JSX. El build purga las clases que no usás, dejando solo las necesarias.
+> 4. ¿Qué ventaja y desventaja tiene styled-components?
+>    - R: Ventaja: estilos co-localizados con la lógica, tipado perfecto, temas con props dinámicas. Desventaja: agrega runtime JS extra al bundle.
+> 5. ¿Cómo elegís entre las tres estrategias?
+>    - R: Depende del equipo: CSS Modules si ya saben CSS puro, Tailwind para velocidad de dev y consistencia, styled-components para co-localización y temas dinámicos. Lo clave es elegir UNA y ser consistente.
+> 6. ¿Qué es el "runtime JS extra" de styled-components?
+>    - R: styled-components genera estilos en runtime (no en build time): el bundle incluye la librería que crea `<style>` tags dinámicos. Esto aumenta el JS que el navegador descarga.

@@ -193,3 +193,23 @@ npm run dev          # 1. dev server levantado en http://localhost:5173
 - [Vite — Crear proyectos con templates](https://vite.dev/guide/#scaffolding-your-first-vite-project)
 - [Vite — Alias de paths](https://vite.dev/config/shared-options#resolve-alias)
 - [TypeScript — Module resolution paths](https://www.typescriptlang.org/tsconfig/#paths)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué se usan `--` antes de `--template react-ts` en `npm create vite`?
+  **R:** Con npm 7+, los `--` separan los argumentos de npm de los de create-vite. Sin ellos, el flag `--template` se pierde o se interpreta mal.
+
+- **P:** ¿Qué es `index.html` en una SPA con Vite y por qué es la única página?
+  **R:** Es el punto de entrada del navegador. Contiene un `<div id="root">` vacío donde React monta toda la app. No hay otras páginas HTML porque la SPA "navega" cambiando componentes, no recargando.
+
+- **P:** ¿Qué hace `StrictMode` en desarrollo y por qué duplica efectos?
+  **R:** En desarrollo, `StrictMode` monta, desmonta y vuelve a montar los componentes para detectar bugs en efectos y lifecycle. En producción no hace nada.
+
+- **P:** ¿Qué es HMR y cómo verificás que funciona?
+  **R:** Hot Module Replacement: actualiza solo el módulo cambiado sin recargar la página. Se verifica editando `App.tsx` y guardando: el cambio aparece en el navegador sin que la URL se resetee.
+
+- **P:** ¿Por qué el alias `@` necesita configuración en DOS lugares?
+  **R:** Vite necesita el alias en `vite.config.ts` para resolver imports en runtime. TypeScript necesita `paths` en `tsconfig.app.json` para el type checking. Sin ambos, uno de los dos falla.
+
+- **P:** ¿Qué hace `createRoot(document.getElementById('root')!).render(<App />)`?
+  **R:** Crea el root de React y monta el componente `<App />` dentro del `<div id="root">` del `index.html`. Es el puente entre HTML estático y la app React.

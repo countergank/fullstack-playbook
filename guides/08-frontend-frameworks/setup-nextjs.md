@@ -215,3 +215,23 @@ npm run dev         # http://localhost:3000
 - [Next.js — App Router (layouts y pages)](https://nextjs.org/docs/app/building-your-application/routing)
 - [Next.js — Server y Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)
 - [Next.js — `create-next-app` CLI flags](https://nextjs.org/docs/app/api-reference/cli/create-next-app)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué diferencia hay entre un Server Component y un Client Component en Next.js?
+  **R:** Un Server Component corre en el servidor, puede ser async y leer datos directo. NO usa hooks ni eventos. Un Client Component (`'use client'`) corre en el navegador con estado, efectos y eventos.
+
+- **P:** ¿Por qué en Next 15+ `params` es una Promise y cómo se resuelve?
+  **R:** Porque Next 15 cambió la API para que `params` sea async. Se resuelve con `const { id } = await params;` dentro del componente server.
+
+- **P:** ¿Qué hace el flag `--app` en `create-next-app`?
+  **R:** Configura el App Router (routing por archivos en `app/`) en vez del Pages Router viejo (`pages/`). Es el modelo actual de Next.js.
+
+- **P:** ¿Cómo verificás que un Server Component realmente renderiza en el servidor?
+  **R:** Abrís DevTools → Network → deshabilitás JavaScript y recargás. Si el HTML ya trae los datos renderizados, es SSR (el servidor los incluyó).
+
+- **P:** ¿Puede un Server Component renderizar un Client Component?
+  **R:** Sí. Un Server Component puede incluir un Client Component como hijo. El `'use client'` marca el límite: desde ahí hacia abajo, todo corre en el navegador.
+
+- **P:** ¿Qué ventaja de seguridad tiene hacer fetch en un Server Component?
+  **R:** Las credenciales de la API quedan en el servidor, nunca viajan al navegador del usuario. En un Client Component, las credenciales serían visibles en el código del cliente.

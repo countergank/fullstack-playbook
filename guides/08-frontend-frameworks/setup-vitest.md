@@ -205,3 +205,23 @@ npm test                    # queda en watch, re-corre al guardar
 - [Vitest — `vitest run` vs watch](https://vitest.dev/guide/cli)
 - [Testing Library — React](https://testing-library.com/docs/react-testing-library/intro)
 - [Testing Library — Queries por rol](https://testing-library.com/docs/queries/about)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué Vitest no necesita configuración extra para JSX o TypeScript?
+  **R:** Porque comparte el mismo pipeline de transformación de Vite. El mismo plugin que transforma tu app transforma tus tests.
+
+- **P:** ¿Qué diferencia hay entre `npm test` y `npm run test:run`?
+  **R:** `npm test` (`vitest`) corre en watch mode: queda escuchando cambios y re-corre al guardar. `npm run test:run` (`vitest run`) hace una sola pasada y termina — ideal para CI.
+
+- **P:** ¿Para qué sirve `environment: 'jsdom'` en la config de Vitest?
+  **R:** Simula la API del DOM en Node. Sin esto, un componente React que interactúa con el DOM falla porque `document` no existe en Node.
+
+- **P:** ¿Por qué Testing Library busca por rol y texto en vez de por clase CSS?
+  **R:** Porque testea como un usuario real: un usuario no ve clases CSS, ve texto y elementos interactivos. Esto hace los tests más robustos ante cambios de implementación.
+
+- **P:** ¿Qué hace `vi.fn()` y para qué se usa en un test?
+  **R:** Crea una función espía (mock) que registra cuántas veces fue llamada y con qué argumentos. Se usa para verificar que callbacks como `onToggle` se disparan correctamente.
+
+- **P:** ¿Qué importa el archivo `src/test/setup.ts` y por qué?
+  **R:** Importa `@testing-library/jest-dom/vitest` que registra matchers legibles como `toBeInTheDocument` sobre `expect` de Vitest, con tipos incluidos.

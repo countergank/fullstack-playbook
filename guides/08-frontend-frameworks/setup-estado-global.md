@@ -247,3 +247,23 @@ npm run dev         # http://localhost:5173
 - [Zustand — Getting started](https://zustand.docs.pmnd.rs/getting-started/introduction)
 - [Zustand — create](https://zustand.docs.pmnd.rs/apis/create)
 - [React — Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué problema resuelve React Context y cuál es su limitación principal?
+  **R:** Resuelve el prop drilling permitiendo que datos globales se lean desde cualquier componente hijo. Su limitación: cuando el value cambia, TODOS los consumidores se re-renderizan.
+
+- **P:** ¿Por qué el hook `useTheme` tira un error si no hay un Provider?
+  **R:** Es intencional: si te olvidás de envolver la app con `<ThemeProvider>`, el error te avisa inmediatamente en desarrollo en vez de fallar silenciosamente en producción.
+
+- **P:** ¿Cómo crea Zustand un store y cómo lo leen los componentes?
+  **R:** Con `create<AuthState>((set) => ({...}))` que devuelve un hook (`useAuth`). Los componentes lo leen con selectores: `useAuth((s) => s.user)` para suscribirse solo a un campo.
+
+- **P:** ¿Por qué los selectores finos de Zustand evitan re-renders innecesarios?
+  **R:** Porque cada componente se suscribe solo al slice del estado que necesita. Si `user` no cambia, el componente que usa `(s) => s.user` no re-renderiza, aunque otro campo del store cambie.
+
+- **P:** ¿Cuándo elegís Context y cuándo Zustand?
+  **R:** Context para datos globales de lectura que cambian poco (tema, idioma). Zustand para estado con lógica, acciones y updates frecuentes (carrito, sesión compleja).
+
+- **P:** ¿Dónde se definen las acciones en Zustand y por qué?
+  **R:** Se definen dentro del store (la función pasada a `create`), no en el componente. Así la lógica queda centralizada, testeable y reutilizable.

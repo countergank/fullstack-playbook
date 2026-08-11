@@ -376,3 +376,23 @@ npm run dev         # http://localhost:5173
 - [React — useCallback](https://react.dev/reference/react/useCallback)
 - [React — useReducer](https://react.dev/reference/react/useReducer)
 - [JSONPlaceholder — fake REST API](https://jsonplaceholder.typicode.com/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué usamos `useReducer` para la lista de tareas en vez de `useState`?
+  **R:** Porque la lista tiene varias transiciones (agregar, completar, borrar, reemplazar desde el server). `useReducer` centraliza toda la lógica en una función pura `(state, action) → newState`, testeable sin UI.
+
+- **P:** ¿Qué pasa si ponés `setState` dentro de un `useEffect` sin array de deps?
+  **R:** Loop infinito: el efecto corre después de cada render, el `setState` dispara otro render, el efecto vuelve a correr... hasta que la pestaña revienta. La cura es definir las deps exactas.
+
+- **P:** ¿Por qué el flag `cancelled` en el fetch es importante?
+  **R:** Evita llamar a `setState` después de que el componente se desmontó, lo que causaría un warning de React y potencialmente un memory leak.
+
+- **P:** ¿Qué diferencia hay entre `useRef` y `useState` en términos de re-render?
+  **R:** `useRef` es mutable pero cambiar `.current` NO dispara re-render. `useState` sí dispara re-render cuando cambia. Usás `useRef` para valores que no necesitan actualizar la UI (como el foco de un input).
+
+- **P:** ¿Por qué `useCallback` es necesario cuando pasás un callback a un hijo memoizado con `React.memo`?
+  **R:** Sin `useCallback`, la función se recrea en cada render del padre, cambiando su identidad. `React.memo` compara props con `===` y la comparación falla, re-renderizando el hijo innecesariamente. `useCallback` mantiene la misma identidad.
+
+- **P:** ¿Cuándo recalcula `useMemo` su valor?
+  **R:** Solo cuando cambia alguna de las dependencias del array. Si `[tasks]` no cambia, el resultado memorizado se reusa sin recalcular.
