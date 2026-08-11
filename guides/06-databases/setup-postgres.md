@@ -110,6 +110,21 @@ docker compose exec db psql -U dev -d fullstack_dev -c "SELECT 1;"  # 1
 
 ---
 
+## Preguntas de repaso
+
+- **P:** ¿Qué comando usás para levantar solo PostgreSQL sin los otros servicios del compose?
+  **R:** `docker compose up -d db`.
+- **P:** ¿Cuál es el connection string para conectar tu app Node a PostgreSQL en Docker?
+  **R:** `postgresql://dev:dev@localhost:5432/fullstack_dev`.
+- **P:** ¿Qué comando dentro de psql lista todas las tablas?
+  **R:** `\dt`.
+- **P:** ¿Por qué los datos se pierden al hacer `docker compose down` si no configuraste volumes?
+  **R:** Porque sin volumen Docker, los datos viven solo dentro del contenedor efímero. Al destruir el contenedor, los datos se pierden.
+- **P:** ¿Qué hace `npx prisma migrate deploy` y en qué entorno se usa?
+  **R:** Aplica migrations pendientes sin crear nuevas. Se usa en producción/CI (a diferencia de `migrate dev` que es para desarrollo).
+
+---
+
 ## Recursos
 
 - [PostgreSQL Docker Image](https://hub.docker.com/_/postgres)

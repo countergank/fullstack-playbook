@@ -100,6 +100,21 @@ docker compose exec mongo mongosh --eval "db.runCommand({ ping: 1 })"   # { ok: 
 
 ---
 
+## Preguntas de repaso
+
+- **P:** ¿Qué comando verificás dentro del contenedor para confirmar que MongoDB responde?
+  **R:** `docker compose exec mongo mongosh --eval "db.runCommand({ ping: 1 })"` que debe devolver `{ ok: 1 }`.
+- **P:** ¿Cuál es el connection string para conectar Mongoose a MongoDB en Docker?
+  **R:** `mongodb://localhost:27017/fullstack_dev`.
+- **P:** ¿Qué comando dentro de mongosh lista todas las bases de datos?
+  **R:** `show dbs`.
+- **P:** ¿Por qué es importante el volumen `mongodata:/data/db` en el compose?
+  **R:** Porque persiste los datos de MongoDB fuera del contenedor. Sin él, al hacer `docker compose down` se pierden todos los documentos.
+- **P:** ¿Cómo insertás un documento desde mongosh?
+  **R:** `db.coleccion.insertOne({ campo: "valor" })`, por ejemplo `db.users.insertOne({ name: "Lean" })`.
+
+---
+
 ## Recursos
 
 - [MongoDB Docker Image](https://hub.docker.com/_/mongo)

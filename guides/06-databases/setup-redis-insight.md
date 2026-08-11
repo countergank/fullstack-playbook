@@ -77,6 +77,21 @@ Abrí Redis Insight, conectá a `localhost:6379` y buscá la key `test`.
 
 ---
 
+## Preguntas de repaso
+
+- **P:** ¿Qué datos usás para conectar Redis Insight a Redis en Docker?
+  **R:** Host: `localhost`, Port: `6379`, Database: 0 (default), sin password.
+- **P:** ¿Por qué dejás el campo de contraseña vacío en Redis Insight?
+  **R:** Porque el `compose.yaml` de `setup-redis.md` no define `requirepass`, así que Redis arranca sin autenticación.
+- **P:** ¿Cómo creás una key de prueba desde la terminal para verla en Insight?
+  **R:** `docker compose exec redis redis-cli set test "hola"`.
+- **P:** ¿Qué información te muestra Redis Insight sobre una key con expiración?
+  **R:** El valor, el tipo de dato, y el TTL en segundos que va bajando en tiempo real.
+- **P:** ¿Qué diferencia hay entre Redis Insight y DBeaver para conectar a Redis?
+  **R:** Insight es el cliente oficial de Redis con la mejor UI para ver TTL, tipos y memoria. DBeaver también soporta Redis pero con una interfaz más genérica.
+
+---
+
 ## Recursos
 
 - [Redis Insight](https://redis.io/insight/)
