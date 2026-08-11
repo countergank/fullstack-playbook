@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué perfiles SDD?
+
+Cada fase del ciclo SDD tiene necesidades distintas de modelo: explorar código requiere velocidad (modelo rápido y barato), diseñar arquitectura requiere razonamiento profundo (modelo potente), y archivar es mecánico (modelo rápido). Los perfiles te pre-configuran qué modelo usar en cada fase, y cambiar de perfil con un atajo (`Tab`) switcha TODOS los sub-agentes de una vez. Sin perfiles, tendrías que configurar modelo por modelo manualmente, lo cual es tedioso y propenso a errores.
+
+---
+
 ## ¿Qué es un perfil SDD?
 
 Un **perfil** es un conjunto de modelos asignados a cada fase del ciclo SDD. Al cambiar de perfil (presionando `Tab` en OpenCode), todos los sub-agentes SDD automáticamente usan los modelos de ese perfil. Esto te permite:
@@ -117,3 +123,30 @@ opencode
 
 - [OpenCode — Profiles](https://opencode.ai/docs/profiles)
 - [Gentle AI — TUI](https://github.com/gentleman-programming/gentle-ai)
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| No ves los perfiles en la TUI | Verificar que Gentle AI está actualizado (`npm install -g gentle-ai@latest`). Los perfiles se configuran desde la TUI, no manualmente |
+| El perfil go no funciona sin créditos | Necesitás una cuenta en opencode.ai con créditos cargados. Sin créditos, usá el perfil zen-free que es gratuito |
+| Cambiás de perfil pero el agente usa el modelo anterior | Reiniciar OpenCode después de cambiar perfil. A veces la sesión activa mantiene el modelo anterior |
+| Nemotron tarda mucho en responder | Es normal — nemotron es lento (~45s por respuesta). Usalo solo para fases que necesitan razonamiento pesado (init, propose, design) |
+| Los modelos free no aparecen en el perfil zen-free | Actualizar OpenCode a 1.18+: `npm install -g @opencode-ai/cli@latest` |
+
+## Preguntas de repaso
+
+- **P:** ¿Qué es un perfil SDD y para qué sirve?
+  **R:** Es un conjunto pre-configurado de modelos asignados a cada fase del ciclo SDD. Cambiar de perfil switcha todos los sub-agentes de una vez con un atajo (`Tab`).
+
+- **P:** ¿Cuándo conviene usar el perfil go vs el zen-free?
+  **R:** Go para trabajo profesional (modelos pagos, calidad superior); zen-free para práctica, aprendizaje y prototipado (modelos gratuitos).
+
+- **P:** ¿Qué modelo del perfil zen-free es el más lento y por qué se usa igual?
+  **R:** `nemotron-3-ultra-free` (~45s). Se usa en fases que requieren razonamiento pesado como init, propose y design, donde la calidad importa más que la velocidad.
+
+- **P:** ¿Cómo cambiás de perfil dentro de OpenCode?
+  **R:** Presionando `Tab` para abrir el selector de perfiles, navegando con las flechas, y confirmando con Enter.
+
+- **P:** ¿Qué modelo se recomienda para la fase de sdd-archive y por qué?
+  **R:** `north-mini-code-free` (zen-free) o `deepseek-v4-flash` (go), porque archivar es una tarea mecánica y simple — velocidad importa más que profundidad.

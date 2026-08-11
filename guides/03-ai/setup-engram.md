@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué Engram?
+
+Sin Engram, cada sesión con IA empieza de cero. Tenés que re-explicar tu stack, tus decisiones de arquitectura, los bugs que ya resolviste, y el contexto del proyecto. Es como trabajar con un compañero que tiene amnesia cada mañana. Engram resuelve esto dando a la IA una memoria persistente entre sesiones: guarda decisiones, descubre patrones, y recupera contexto automáticamente. La diferencia es brutal: de "explicame tu proyecto de nuevo" a "ya sé dónde estábamos, sigamos".
+
+---
+
 ## ¿Qué es Engram?
 
 Engram es una base de datos de memoria persistente que los agentes de IA consultan entre sesiones. Sin Engram, cada conversación con IA arranca de cero. Con Engram, la IA "recuerda" tus decisiones, bugs resueltos, patrones y contexto entre sesiones.
@@ -97,3 +103,20 @@ Dentro de OpenCode, ejecutá estas dos pruebas:
 
 - [Engram — GitHub](https://github.com/gentleman-programming/engram)
 - [Gentle AI — CLI + TUI](https://github.com/gentleman-programming/gentle-ai)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué problema resuelve Engram en el flujo de desarrollo con IA?
+  **R:** Da memoria persistente a los agentes entre sesiones. Sin Engram, cada conversación empieza de cero; con Engram, la IA recuerda decisiones, bugs resueltos, y contexto del proyecto.
+
+- **P:** ¿Cómo se instala Engram?
+  **R:** Desde la TUI de Gentle AI (`gentle-ai`), navegando a la sección de instalación/gestión de componentes y seleccionando la opción para instalar/activar Engram.
+
+- **P:** ¿Qué hace `mem_save` y cuándo se llama?
+  **R:** Guarda una observación (decisión, bug, patrón) en la base de datos persistente. Se llama PROACTIVAMENTE después de cualquier hallazgo importante, no cuando el usuario lo pide.
+
+- **P:** ¿Cómo verificás que Engram está funcionando correctamente?
+  **R:** Guardando algo con `mem_save` y luego buscándolo con `mem_search`. Si encuentra lo que acabás de guardar, está funcionando.
+
+- **P:** ¿Qué pasa si `mem_search` no encuentra nada?
+  **R:** Es normal en la primera sesión — no hay historial todavía. Las memorias se acumulan con el uso. Forzá un save manual para probar.

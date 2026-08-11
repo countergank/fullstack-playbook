@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué OpenCode?
+
+OpenCode es el runtime donde vive todo el ecosistema Gentle AI. Sin OpenCode, no tenés agentes, no tenés SDD, no tenés memoria persistente, no tenés skills — nada de lo que este playbook enseña funciona. Es la pieza central: el "sistema operativo" donde corren todos los agentes de IA que te ayudan a desarrollar. Otros editores con IA (Cursor, Copilot) solo sugieren código; OpenCode va más lejos: lee tu proyecto, ejecuta comandos, delega tareas a sub-agentes, y mantiene memoria entre sesiones.
+
+---
+
 ## ¿Qué es OpenCode?
 
 OpenCode es el runtime donde corren los agentes de Gentle AI. Provee herramientas (Read, Write, Bash, Task, etc.), integración con modelos (opencode, OpenRouter, Anthropic, OpenAI), MCP (Model Context Protocol) para memoria y documentación, y perfiles para cambiar entre distintas configuraciones de modelos con un atajo de teclado.
@@ -104,3 +110,20 @@ El archivo se crea automáticamente la primera vez que lanzás OpenCode. No nece
 
 - [OpenCode](https://opencode.ai)
 - [OpenCode CLI npm](https://www.npmjs.com/package/@opencode-ai/cli)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué necesitás Node.js antes de instalar OpenCode?
+  **R:** Porque OpenCode es un paquete npm (`@opencode-ai/cli`). Se instala con `npm install -g` y requiere Node.js para ejecutarse.
+
+- **P:** ¿Qué ventaja tienen los modelos gratuitos del provider `opencode` en versiones 1.18+?
+  **R:** Permiten usar OpenCode sin API key ni costo, ideal para aprender y practicar sin gastar dinero.
+
+- **P:** ¿Cómo cambiás de perfil de modelos dentro de OpenCode?
+  **R:** Presionando `Tab` dentro de la TUI para abrir el selector de perfiles, y eligiendo con las flechas + Enter.
+
+- **P:** ¿Qué significa si OpenCode tira `Permission denied` al ejecutar un comando Bash?
+  **R:** Que el sistema de permisos de OpenCode bloqueó la ejecución. Debés permitir la herramienta desde la UI o configurar permisos en `opencode.json`.
+
+- **P:** ¿Qué diferencia hay entre OpenCode y un editor con IA como Cursor?
+  **R:** OpenCode es un runtime de agentes con herramientas completas (Bash, Task, MCP, memoria), mientras que Cursor es un editor con autocompletado y chat. OpenCode puede ejecutar comandos, delegar a sub-agentes, y mantener memoria entre sesiones.
