@@ -133,3 +133,25 @@ sessionStorage.setItem('pref', 'x');
 - [Chrome DevTools — Docs](https://developer.chrome.com/docs/devtools/)
 - [Chrome DevTools — Network reference](https://developer.chrome.com/docs/devtools/network/reference/)
 - [Chrome DevTools — Sources overview](https://developer.chrome.com/docs/devtools/javascript/)
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué DevTools solo muestra requests que ocurren DESPUÉS de abrirlo?
+  **R:** DevTools intercepta el tráfico de red desde el momento en que se abre; los requests anteriores ya fueron procesados por el navegador y no se registran retroactivamente. Usá "Preserve log" para mantener el historial entre recargas.
+
+- **P:** ¿Cuál es la diferencia entre `localStorage` y `sessionStorage`?
+  **R:** `localStorage` persiste entre recargas y cierres del navegador (mismo dominio); `sessionStorage` se borra al cerrar la pestaña. Ambos comparten el mismo API (`setItem`, `getItem`, `removeItem`).
+
+- **P:** ¿Qué pestaña de DevTools usarías para ver cuánto tiempo tarda un request en cada fase (DNS, conexión, espera, descarga)?
+  **R:** La pestaña **Network**, seleccionando un request y mirando el tab **Timing** (waterfall), que desglosa el tiempo por fase.
+
+- **P:** ¿Cómo simularías una conexión lenta para probar cómo se comporta tu app en 3G?
+  **R:** En la pestaña Network, usá el dropdown de throttling (arriba, donde dice "No throttling") y elegí "Slow 3G" o "Fast 3G". Esto afecta TODOS los requests hasta que lo desactivés.
+
+- **P:** ¿Qué hace el statement `debugger` en JavaScript y qué condición debe cumplirse para que funcione?
+  **R:** Pausa la ejecución del código en esa línea, como un breakpoint programático. DevTools debe estar ABIERTO cuando se ejecute esa línea; si está cerrado, el `debugger` se ignora.
+
+- **P:** ¿Por qué una cookie con `HttpOnly` no es accesible desde `document.cookie`?
+  **R:** El flag `HttpOnly` le dice al navegador que esa cookie solo se envíe en requests HTTP, no que sea legible por JavaScript. Esto previene que scripts maliciosos (XSS) roben la cookie de sesión.
