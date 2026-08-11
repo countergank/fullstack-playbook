@@ -138,3 +138,20 @@ La delegación brilla acá: agregá dos items, borrá con los botones y verifica
 - [MDN — Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
 - [MDN — Event bubbling y delegation](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
 - [MDN — textContent vs innerHTML (XSS)](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué es el event bubbling y cómo lo aprovechás con delegación?
+  **R:** El event bubbling es cuando un evento sube del elemento donde ocurrió hacia sus ancestros. Con delegación, ponés un solo listener en el contenedor padre (ej: `ul`) y manejás los clics de todos los hijos con `event.target.closest()`.
+
+- **P:** ¿Por qué `textContent` es más seguro que `innerHTML`?
+  **R:** `textContent` inserta texto plano sin interpretar HTML. `innerHTML` parsea y renderiza HTML, lo que permite inyección de scripts maliciosos (XSS) si el contenido viene del usuario.
+
+- **P:** ¿Qué hace `event.target.closest('button')`?
+  **R:** Sube el árbol del DOM desde el elemento del clic buscando el primer ancestro (o el mismo) que sea un `button`. Devuelve `null` si no encuentra ninguno.
+
+- **P:** ¿Por qué el botón debe tener `type="button"` dentro de un formulario?
+  **R:** Porque por defecto un `<button>` dentro de un `form` actúa como `type="submit"` y recarga la página. `type="button"` evita ese comportamiento.
+
+- **P:** ¿Qué diferencia hay entre `querySelector` y `querySelectorAll`?
+  **R:** `querySelector` devuelve el primer elemento que matchea el selector. `querySelectorAll` devuelve todos los elementos que matchean en un NodeList iterable (podés usar `forEach`).

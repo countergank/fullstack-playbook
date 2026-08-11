@@ -99,3 +99,20 @@ Aplicá los fixes que señalen axe y Lighthouse (los colores de contrast se corr
 - [Chrome DevTools — Accessibility reference](https://developer.chrome.com/docs/devtools/accessibility/reference/)
 - [MDN — Accessibilidad](https://developer.mozilla.org/es/docs/Web/Accessibility)
 - [WebAIM — Contrast Checker](https://webaim.org/resources/contrastchecker/)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué diferencia hay entre axe DevTools y Lighthouse?
+  **R:** axe es una extensión que detecta violaciones concretas de accesibilidad (roles faltantes, contraste, labels). Lighthouse es una auditoría integrada de Chrome que mide múltiples categorías (Performance, Accessibility, SEO, Best Practices). axe es más específico en a11y; Lighthouse da un score general.
+
+- **P:** ¿Cuál es el ratio mínimo de contraste WCAG AA para texto normal?
+  **R:** 4.5:1. Para texto grande (18pt+ o 14pt bold) el mínimo es 3:1.
+
+- **P:** ¿Por qué no debés usar `outline: none` sin reemplazo?
+  **R:** Porque elimina el indicador visual de foco, haciendo imposible saber qué elemento está seleccionado al navegar con Tab. Si querés customizarlo, usá `:focus-visible` con un estilo alternativo visible.
+
+- **P:** ¿Qué significa que una imagen tenga `alt=""` (alt vacío)?
+  **R:** Que la imagen es decorativa y los lectores de pantalla la ignoran. Si la imagen tiene información, el `alt` debe describirla brevemente.
+
+- **P:** ¿Cómo emulás el foco visible en DevTools?
+  **R:** DevTools → ⋮ (tres puntos) → More tools → Rendering → tildar "Emulate a focused page". Así navegás con Tab y ves exactamente qué elemento se enfoca.

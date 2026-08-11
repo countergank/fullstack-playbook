@@ -167,3 +167,20 @@ function mostrarPosicion() {
 - [MDN — Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
 - [MDN — Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 - [MDN — Geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué `fetch` no lanza error en un 404 y cómo lo manejás?
+  **R:** `fetch` solo rechaza la Promise en fallos de red (sin conexión, DNS inválido). Un 404 es una respuesta HTTP válida. Se maneja chequeando `res.ok` o `res.status` después del `await`.
+
+- **P:** ¿Qué tipo de datos guarda `localStorage` y cómo persistís un objeto?
+  **R:** Solo strings. Para objetos: `localStorage.setItem('key', JSON.stringify(obj))` al guardar, y `JSON.parse(localStorage.getItem('key'))` al leer. Si no existe, `getItem` devuelve `null`.
+
+- **P:** ¿Qué ventaja tiene `IntersectionObserver` sobre escuchar el evento `scroll`?
+  **R:** `IntersectionObserver` es asíncrono y no bloquea el main thread. Escuchar `scroll` dispara un handler en cada frame del scroll, causando reflow y jank. El observer solo notifica cuando el elemento cruza el threshold.
+
+- **P:** ¿Por qué `navigator.geolocation` requiere HTTPS?
+  **R:** Porque la ubicación es información sensible. Los navegadores bloquean APIs de geolocalización en contextos no seguros (http:// o file://) para proteger la privacidad del usuario.
+
+- **P:** ¿Cuál es la diferencia entre `localStorage` y `sessionStorage`?
+  **R:** `localStorage` persiste entre sesiones (sobrevive al cerrar el navegador). `sessionStorage` se borra al cerrar la pestaña. Ambos tienen el mismo API y límite de ~5MB por origin.
