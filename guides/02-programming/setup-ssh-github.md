@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué SSH?
+
+Sin SSH, cada `git push` te pide usuario y contraseña (o un Personal Access Token). Con SSH, configurás una vez y nunca más. Además, SSH es más seguro: la llave privada nunca sale de tu máquina, y GitHub solo verifica la firma criptográfica. En entornos corporativos con 2FA, HTTPS con password directamente no funciona — necesitás tokens. SSH evita toda esa complejidad.
+
+---
+
 ## Checklist
 
 ### 1. Verificar si ya tenés llaves
@@ -112,3 +118,23 @@ cd algun-repo && git push   # SIN pedir credenciales
 
 - [GitHub Docs — Connecting with SSH](https://docs.github.com/en/authentication/connecting-for-github-with-ssh)
 - [GitHub Docs — Adding a new SSH key](https://docs.github.com/en/authentication/connecting-for-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué Ed25519 es recomendado sobre RSA para llaves SSH?
+  **R:** Ed25519 es más rápido, más seguro, genera llaves más cortas (68 chars vs 3000+ de RSA), y no tiene las vulnerabilidades de implementación que tuvo RSA. Es el algoritmo moderno preferido por OpenSSH.
+
+- **P:** ¿Qué hace `ssh-agent` y por qué es necesario?
+  **R:** ssh-agent mantiene las llaves desbloqueadas en memoria para que no tengas que escribir la passphrase en cada operación SSH. Sin él, cada `git push` te pediría la passphrase de la llave.
+
+- **P:** ¿Cómo cambiás un repo ya clonado con HTTPS a SSH?
+  **R:** Con `git remote set-url origin git@github.com:usuario/repo.git`. Esto cambia la URL del remote `origin` de HTTPS a SSH sin necesidad de reclonar.
+
+- **P:** ¿Qué significa el error "Host key verification failed"?
+  **R:** Es la primera vez que te conectás a ese servidor SSH y no tenés su host key guardada en `~/.ssh/known_hosts`. Escribí `yes` cuando te pregunte si confiás en el host.
+
+- **P:** ¿Cómo manejás dos cuentas de GitHub (personal + trabajo) sin conflictos?
+  **R:** Creás un archivo `~/.ssh/config` con dos entradas `Host` distintas, cada una con su propia `IdentityFile`. Luego usás el host alias en el remote: `git@github-work:usuario/repo.git` para trabajo.
+
+- **P:** ¿Qué pasa si perdés tu llave privada?
+  **R:** Perdés acceso a todos los repos donde registraste la llave pública correspondiente. Necesitás generar un nuevo par de llaves y registrar la nueva pública en GitHub. Por eso es importante tener backups seguros de la llave privada.

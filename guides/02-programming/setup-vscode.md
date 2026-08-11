@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué VS Code?
+
+VS Code es el editor más usado en el mundo del desarrollo web (74% según la encuesta de Stack Overflow 2024). No es el más ligero ni el más potente, pero es el que mejor equilibrio ofrece entre rendimiento, extensibilidad, y comunidad. Su integración nativa con WSL, Git, terminals, y language servers lo convierte en el centro de operaciones del desarrollador full stack. No necesitás un IDE pesado como IntelliJ para JavaScript/TypeScript — VS Code con las extensiones correctas cubre el 95% de los casos de uso.
+
+---
+
 ## Checklist
 
 ### 1. Instalar VS Code
@@ -105,3 +111,23 @@ node --version          # si instalaste Node, responde
 
 - [VS Code — WSL docs](https://code.visualstudio.com/docs/remote/wsl)
 - [VS Code — Keybindings](https://code.visualstudio.com/docs/getstarted/keybindings)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué las extensiones de language server deben instalarse "en WSL" y no en Windows?
+  **R:** Porque el language server necesita acceder a las herramientas del proyecto (Node, TypeScript compiler, etc.) que viven dentro del entorno Linux de WSL. Si se instala solo en Windows, no encuentra los binaries ni el node_modules.
+
+- **P:** ¿Qué hace `"editor.formatOnSave": true` y por qué es útil?
+  **R:** Formatea automáticamente el archivo cada vez que guardás. Combinado con Prettier, elimina discusiones de estilo en code reviews y mantiene consistencia en todo el equipo.
+
+- **P:** ¿Cómo abrís VS Code conectado a WSL desde la terminal?
+  **R:** Con el comando `code .` ejecutado desde dentro de la terminal WSL. VS Code detecta que está en WSL y se conecta automáticamente al remote.
+
+- **P:** ¿Qué extensión te muestra el blame de cada línea directamente en el editor?
+  **R:** GitLens. Muestra quién modificó cada línea, en qué commit y cuándo, sin necesidad de correr `git blame` en la terminal.
+
+- **P:** ¿Por qué es importante `"editor.rulers": [100]`?
+  **R:** Muestra una línea vertical a los 100 caracteres, ayudando a mantener las líneas dentro del límite recomendado. Líneas muy largas son difíciles de leer en diffs y code reviews.
+
+- **P:** ¿Qué atajo usás para buscar un archivo por nombre en todo el proyecto?
+  **R:** `Ctrl+P`. Escribís parte del nombre y VS Code lo encuentra instantáneamente usando fuzzy matching.

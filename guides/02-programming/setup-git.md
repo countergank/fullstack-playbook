@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué Git?
+
+Git es el sistema de control de versiones estándar de la industria. No es opcional si querés trabajar en desarrollo profesional. Cada empresa, cada proyecto open source, cada equipo usa Git. No alcanza con saber `add`, `commit`, `push` — necesitás entender el modelo de datos para poder deshacer errores, resolver conflictos, y colaborar sin romper el trabajo de otros. Esta guide te deja con Git configurado correctamente desde el día uno, evitando los problemas clásicos de principiante (emails wrong, line endings, credenciales).
+
+---
+
 ## Checklist
 
 ### 1. Instalar Git
@@ -123,3 +129,23 @@ git log --oneline              # muestra tu commit
 
 - [Pro Git book](https://git-scm.com/book/en/v2)
 - [GitHub — Configurar Git](https://docs.github.com/en/get-started/getting-started-with-git/set-up-git)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué el email de Git debe ser el mismo que usás en GitHub?
+  **R:** Porque GitHub atribuye commits a tu cuenta comparando el email del commit con los emails registrados en tu perfil. Si no coinciden, tus commits aparecen como "anonimos" y no se cuentan en tu contribución.
+
+- **P:** ¿Qué hace `core.autocrlf input` y por qué es importante en WSL?
+  **R:** Le dice a Git que NO convierta saltos de línea al hacer checkout. En Linux/WSL los saltos son LF, y si Git los convierte a CRLF al checkout, cada archivo aparece como modificado aunque no lo esté.
+
+- **P:** ¿Para qué sirve un `.gitignore` global?
+  **R:** Para ignorar archivos que nunca deberían commitearse en NINGÚN proyecto: `node_modules/`, `.DS_Store`, `.env`, archivos de IDE. Así no necesitás crear un `.gitignore` desde cero en cada repo nuevo.
+
+- **P:** ¿Qué ventaja tiene usar aliases como `git lg` en vez del comando completo?
+  **R:** Velocidad y ergonomía. `git lg` es más corto que `git log --oneline --graph --all --decorate` y lo usás decenas de veces por día. Los aliases reducen la fricción de las operaciones más comunes.
+
+- **P:** ¿Cómo configurás una identidad diferente para un proyecto específico?
+  **R:** Dentro del repo, sin `--global`: `git config user.name "Nombre"` y `git config user.email "email"`. Esto sobreescribe la config global solo para ese repositorio.
+
+- **P:** ¿Qué hace `git config --global core.editor "code --wait"`?
+  **R:** Configura VS Code como el editor para mensajes de commit y merge conflicts. El flag `--wait` es crucial: sin él, VS Code abre y Git piensa que cancelaste la operación.

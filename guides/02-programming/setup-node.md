@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué un gestor de versiones de Node?
+
+Instalar Node directamente con `apt install nodejs` te da una versión fija que no podés cambiar por proyecto. En el mundo real, un proyecto necesita Node 18, otro Node 20, otro Node 22. Sin un version manager, tendrías que desinstalar y reinstalar constantemente. nvm (o fnm) te permite tener TODAS las versiones instaladas y switchear entre ellas con un comando. Además, no requiere `sudo` porque instala en tu home directory.
+
+---
+
 ## Checklist
 
 ### 1. Instalar nvm (Node Version Manager)
@@ -88,3 +94,23 @@ nvm current      # v22.x.x
 - [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm)
 - [Node.js — Releases (LTS)](https://nodejs.org/en/about/previous-releases)
 - [pnpm](https://pnpm.io/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué usar nvm en vez de instalar Node directamente con `apt`?
+  **R:** Porque `apt` te da una versión fija del repositorio de Ubuntu (que suele ser vieja). nvm te permite instalar cualquier versión, switchear entre ellas por proyecto, y no requiere `sudo`.
+
+- **P:** ¿Qué hace `nvm alias default lts/*`?
+  **R:** Define la versión LTS más reciente como la default, para que cada terminal nueva arranque con esa versión sin tener que hacer `nvm use` manualmente.
+
+- **P:** ¿Por qué pnpm es mejor que npm en términos de espacio en disco?
+  **R:** Porque pnpm usa hardlinks para compartir paquetes entre proyectos. Si 10 proyectos usan express@4.18, npm lo descarga 10 veces en cada node_modules. pnpm lo guarda una vez en un store global y crea links.
+
+- **P:** ¿Cómo funciona `.nvmrc` y qué ventaja tiene?
+  **R:** Es un archivo en la raíz del proyecto que contiene el número de versión de Node (ej: "22"). Al ejecutar `nvm use` sin argumentos, lee automáticamente ese archivo. Podés automatizarlo con herramientas como `avn` o `zsh-nvm` para que haga el switch al entrar al directorio.
+
+- **P:** ¿Qué pasa si un proyecto usa yarn pero tenés pnpm instalado?
+  **R:** pnpm puede instalar dependencias de proyectos que usen yarn.lock, pero es mejor usar el gestor que el proyecto especifica. Cada gestor tiene su propio lockfile y algoritmo de resolución. Mezclarlos puede causar inconsistencias.
+
+- **P:** ¿Por qué configurás `npm config set fund false`?
+  **R:** Para desactivar los mensajes de "fund" que npm muestra al final de cada instalación, pidiendo que sponsorices paquetes. Son distractores en el output y no aportan al desarrollo.

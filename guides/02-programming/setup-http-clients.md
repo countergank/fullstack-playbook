@@ -20,6 +20,12 @@
 
 ---
 
+## ¿Por qué clientes HTTP?
+
+Cuando desarrollás APIs, necesitás probarlas SIN depender del frontend. Un cliente HTTP te permite enviar requests manuales, inspeccionar responses, verificar status codes, headers, y body. curl es la navaja suiza de la terminal — está en todo servidor Linux, incluyendo producción. Postman/Insomnia te dan una GUI para explorar, organizar colecciones, y compartir requests con el equipo. Sin estas herramientas, debuggear APIs es a ciegas.
+
+---
+
 ## Checklist
 
 ### 1. curl (viene con WSL/Ubuntu)
@@ -105,8 +111,41 @@ curl -X POST --json '{"a": 1}' https://httpbin.org/post  # 200 con tu JSON de vu
 
 ---
 
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| `curl: (7) Failed to connect` | El servidor no está corriendo o el puerto es incorrecto. Verificá con `docker compose ps` o `netstat -tlnp` |
+| `curl: (60) SSL certificate problem` | El certificado SSL no es válido. Usá `curl -k` para ignorar (solo en desarrollo) o `curl --cacert` para usar un CA específico |
+| Postman no conecta a `localhost` en WSL | WSL2 expone puertos en localhost automáticamente. Si falla, reiniciá WSL: `wsl --shutdown` |
+| Response JSON no se formatea en Postman | Click en "Pretty" en la parte inferior del body. Si el Content-Type no es `application/json`, Postman no lo detecta |
+| `curl --json` no funciona | Tu versión de curl es anterior a 7.82. Usá `-H "Content-Type: application/json" -d '{"a":1}'` en su lugar |
+| Request con auth falla | Verificá que el token no haya expirado. Usá `curl -v` para ver el exchange completo de headers |
+
+---
+
 ## Recursos
 
 - [curl — documentación oficial](https://curl.se/docs/)
 - [Postman Learning Center](https://learning.postman.com/)
 - [httpbin — servicio para testear requests](https://httpbin.org/)
+
+## Preguntas de repaso
+
+- **P:** ¿Cuál es la diferencia entre `curl` y Postman/Insomnia?
+  **R:** curl es una herramienta de terminal, scripteable, disponible en todo servidor Linux (incluyendo producción). Postman/Insomnia son GUIs con features visuales como colecciones, entornos, y testing automatizado. Ambos son complementarios.
+
+- **P:** ¿Qué hace el flag `-v` en curl y por qué es útil para debugging?
+  **R:** Muestra el intercambio completo de HTTP: headers de request, headers de response, handshake TLS, y body. Es la forma más rápida de ver exactamente qué está pasando entre cliente y servidor.
+
+- **P:** ¿Cómo enviás un POST con JSON usando curl?
+  **R:** Con `curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' URL` o, en curl 7.82+, `curl --json '{"key":"value"}' URL`.
+
+- **P:** ¿Para qué sirve `curl -o /dev/null -w "%{http_code}" URL`?
+  **R:** Descarta el body (`-o /dev/null`) y muestra solo el status code HTTP. Es útil para health checks rápidos o scripts de monitoreo.
+
+- **P:** ¿Qué ventaja tiene REST Client de VS Code sobre Postman?
+  **R:** Los requests se guardan como archivos `.http` versionables en el repo. Todo el equipo puede ver, ejecutar, y modificar los requests sin salir del editor y sin depender de una cuenta de Postman.
+
+- **P:** ¿Cómo probás un endpoint que requiere autenticación Bearer?
+  **R:** Con `curl -H "Authorization: Bearer <token>" URL`. El token va en el header Authorization con el prefijo "Bearer".

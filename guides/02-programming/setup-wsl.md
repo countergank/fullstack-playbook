@@ -131,3 +131,23 @@ code --version      # VS Code abre remoto-WSL correctamente
 
 - [Microsoft Docs — Instalar WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
 - [Microsoft Docs — Configuración avanzada (.wslconfig)](https://learn.microsoft.com/en-us/windows/wsl/wsl-config)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué WSL2 es preferible a WSL1 para desarrollo?
+  **R:** Porque WSL2 corre un kernel Linux real, no una capa de compatibilidad. Esto significa compatibilidad completa con Docker, systemd, y todas las herramientas Linux. WSL1 traduce syscalls Linux a Windows, lo que falla con herramientas que esperan un kernel real.
+
+- **P:** ¿Por qué deberías usar una versión LTS de Ubuntu en vez de la última versión disponible?
+  **R:** Porque las LTS (Long Term Support) tienen 5 años de actualizaciones de seguridad. Las versiones intermedias solo tienen 9 meses de soporte. No querés que tu entorno de desarrollo se quede sin parches de seguridad a los 9 meses.
+
+- **P:** ¿Qué hace `wsl --shutdown` y cuándo lo necesitarías?
+  **R:** Apaga completamente todas las distros WSL corriendo. Lo necesitás cuando hay problemas de red, memoria, o cuando Docker Desktop pierde conexión con WSL. Es el "reiniciar" de WSL.
+
+- **P:** ¿Por qué la regla de oro es trabajar en `~/` y no en `/mnt/c/`?
+  **R:** Porque `/mnt/c/` usa el puente Windows-Linux que añade latencia masiva en operaciones de I/O. Git status, npm install, y Docker mounts son MUCHO más lentos. `~/` usa el filesystem nativo ext4 de Linux.
+
+- **P:** ¿Cómo accedés a tus archivos de WSL desde el Explorador de Windows?
+  **R:** Escribiendo `\\wsl$\` en la barra de direcciones del Explorador. Si instalaste la app "Windows Subsystem for Linux" de la Microsoft Store, también aparece un ícono de Linux en la barra lateral.
+
+- **P:** ¿Qué es el archivo `.vhdx` y por qué no deberías modificarlo manualmente?
+  **R:** Es el disco virtual de WSL2 donde se almacena todo el filesystem Linux. Modificarlo manualmente puede corromper la distro. Para acceder a tus datos, usá las rutas `\\wsl$\` o el acceso del Explorador.

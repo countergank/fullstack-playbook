@@ -160,3 +160,23 @@ docker run --rm hello-world       # "Hello from Docker!"
 - [Docker Desktop — WSL 2 best practices](https://docs.docker.com/desktop/wsl/)
 - [Docker Compose — Getting Started](https://docs.docker.com/compose/gettingstarted/)
 - [Play with Docker (práctica online)](https://labs.play-with-docker.com/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué Docker Desktop necesita WSL2 como backend en Windows?
+  **R:** Porque los contenedores Linux necesitan un kernel Linux para correr. WSL2 proporciona ese kernel real, mientras que Hyper-V virtualiza hardware completo (más pesado). Docker en Windows puro no puede correr contenedores Linux nativamente.
+
+- **P:** ¿Qué diferencia hay entre `docker compose up` y `docker compose up -d`?
+  **R:** Sin `-d`, los logs de todos los servicios se muestran en la terminal y bloquea hasta que hagas Ctrl+C. Con `-d` (detached), los servicios corren en background y la terminal queda libre.
+
+- **P:** ¿Qué pasa si ejecutás `docker compose down -v`?
+  **R:** Apaga los contenedores Y BORRA los volúmenes declarados, eliminando TODOS los datos persistentes (bases de datos, caches). Usalo solo cuando querés empezar de cero.
+
+- **P:** ¿Por qué los archivos del proyecto deben estar en `~/` de WSL y no en `/mnt/c/`?
+  **R:** Porque el puente Windows-Linux añade latencia significativa en I/O. Docker monta volúmenes mucho más rápido desde el filesystem nativo de Linux, y evita problemas de permisos entre sistemas de archivos distintos.
+
+- **P:** ¿Cómo entrás a la terminal de un contenedor corriendo?
+  **R:** Con `docker exec -it <nombre-o-id> sh` (o `bash` si la imagen lo tiene). El flag `-it` abre una terminal interactiva dentro del contenedor.
+
+- **P:** ¿Qué hace `docker system prune -a` y qué precaución hay que tener?
+  **R:** Borra TODAS las imágenes, contenedores detenidos, redes no usadas, y build cache. Libera GB de disco pero elimina imágenes que podrías necesitar. Usalo solo cuando estés seguro de que podés volver a descargar las imágenes.

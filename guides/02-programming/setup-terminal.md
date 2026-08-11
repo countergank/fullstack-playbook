@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué una terminal moderna?
+
+La terminal es tu herramienta principal como desarrollador. Cada día la usás cientos de veces: git, npm, docker, servidores, scripts. Una terminal moderna con Zsh, Starship, y herramientas como ripgrep y fd no es un lujo — es una inversión en productividad. Los atajos, el autocompletado, y el feedback visual (colores, íconos) reducen la fricción de cada operación. No necesitás ser experto en terminal, pero sí cómodo.
+
+---
+
 ## Checklist
 
 ### 1. Windows Terminal
@@ -102,9 +108,42 @@ ls                   # con íconos y colores
 
 ---
 
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| `batcat` en vez de `bat` | En Ubuntu el paquete se llama `bat` pero el binario es `batcat`. Creá un alias: `alias bat='batcat'` en tu `.zshrc` |
+| Starship no aparece después de instalar | Asegurate de agregar `eval "$(starship init zsh)"` al `.zshrc` y hacer `source ~/.zshrc` |
+| Los íconos de eza/Starship se ven como cuadrados | No tenés una Nerd Font instalada. Instalá "JetBrainsMono Nerd Font" y configurala en Windows Terminal |
+| `zsh-autosuggestions` no funciona | Necesitás clonar el repo en `~/.oh-my-zsh/custom/plugins/` y agregarlo a `plugins=(...)` en `.zshrc` |
+| `fd` no se encuentra | En Ubuntu el paquete es `fd-find` y el binario es `fdfind`. Creá un alias: `alias fd='fdfind'` |
+| Oh My Zsh tarda en cargar | Desactivá plugins que no uses. Cada plugin añade tiempo de inicio. Mantené solo git y los esenciales |
+
+---
+
 ## Recursos
 
 - [Oh My Zsh](https://ohmyz.sh/)
 - [Starship](https://starship.rs/)
 - [ripgrep](https://github.com/BurntSushi/ripgrep) / [fd](https://github.com/sharkdp/fd) / [bat](https://github.com/sharkdp/bat)
 - [Nerd Fonts](https://www.nerdfonts.com/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué Zsh es preferible a Bash como shell por defecto?
+  **R:** Zsh tiene mejor autocompletado, corrección de typos, temas visuales, y es compatible con la mayoría de scripts de Bash. Con Oh My Zsh, obtenés plugins y temas que Bash no tiene nativamente.
+
+- **P:** ¿Qué hace Starship y por qué es mejor que el prompt por defecto?
+  **R:** Starship muestra información contextual en el prompt: branch de git, versión de Node/Python, tiempo de ejecución del último comando, y más. Es rápido (escrito en Rust) y funciona con cualquier shell.
+
+- **P:** ¿Por qué ripgrep es mejor que grep para buscar en código?
+  **R:** ripgrep es más rápido (multithreading en Rust), ignora `.gitignore` automáticamente, tiene mejor syntax de regex, y muestra resultados con colores y contexto de forma más legible.
+
+- **P:** ¿Qué hace `fzf` y cómo lo usarías en el día a día?
+  **R:** fzf es un fuzzy finder que te permite buscar interactivamente en historial de comandos, archivos, procesos, etc. Con `Ctrl+R` en la terminal, buscás comandos antiguos escribiendo parte del texto.
+
+- **P:** ¿Por qué es importante instalar una Nerd Font?
+  **R:** Porque herramientas como Starship y eza usan íconos Unicode especiales (git branch, lenguajes de programación, tipos de archivo) que las fuentes normales no tienen. Sin Nerd Font, esos íconos se ven como cuadrados vacíos.
+
+- **P:** ¿Qué ventaja tiene `zsh-autosuggestions`?
+  **R:** Muestra sugerencias grises mientras escribís, basadas en tu historial de comandos. Si escribiste `docker compose up -d` antes, la próxima vez que escribas `doc` te sugiere el comando completo. Lo aceptás con la flecha derecha.
