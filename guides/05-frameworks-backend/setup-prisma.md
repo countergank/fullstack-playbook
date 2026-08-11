@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué Prisma?
+
+Escribir SQL a mano funciona, pero es propenso a errores: typos en nombres de columnas, queries sin tipar, y migraciones manuales. Prisma genera un cliente TypeScript a partir de un schema declarativo — tu editor autocompleta cada query con tipos exactos. Si cambiás el schema y regenerás, el compilador te marca todo el código roto. Es type-safety real para tu base de datos.
+
+---
+
 ## Checklist
 
 ### 1. Instalar Prisma
@@ -103,6 +109,36 @@ npx prisma studio                     # UI abre mostrando la tabla User
 ```
 
 **Si `prisma studio` muestra tu modelo → Prisma listo. ✅**
+
+---
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| `Error: P1001: Can't reach database server` | PostgreSQL no está corriendo o el `DATABASE_URL` es incorrecto. Verificá con `docker ps` y probá la conexión con `psql`. |
+| `Error: P4001: The migration directory is out of sync` | La DB y el schema.prisma están desincronizados. Ejecutá `npx prisma migrate resolve --applied <migration>` o reseteá con `npx prisma migrate reset`. |
+| El cliente Prisma no tiene autocompletado | Ejecutá `npx prisma generate` después de cada cambio al schema. El cliente se regenera en `node_modules/.prisma/client`. |
+| `PrismaClientValidationError` en runtime | Los datos que pasás no coinciden con el schema. Verificá los tipos y campos requeridos. Prisma valida en runtime además de compile-time. |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Qué significa que Prisma sea "type-safe"?
+  **R:** Que TypeScript conoce la estructura exacta de cada modelo. Si escribís `prisma.user.findUnique()`, el editor sabe que el resultado tiene `.id`, `.email`, `.name`, etc. — sin strings mágicos.
+
+- **P:** ¿Qué hace `npx prisma migrate dev`?
+  **R:** Compara el schema.prisma con el estado actual de la DB, genera SQL de migración, y lo aplica. En desarrollo puede resetear la DB si hay conflictos.
+
+- **P:** ¿Qué diferencia hay entre `prisma migrate dev` y `prisma migrate deploy`?
+  **R:** `dev` genera Y aplica migraciones (puede resetear). `deploy` solo aplica migraciones existentes — se usa en producción, nunca resetea datos.
+
+- **P:** ¿Qué es `prisma studio`?
+  **R:** Una UI web que se abre en el navegador para explorar y editar datos de tu base de datos. Útil para desarrollo y debugging.
+
+- **P:** ¿Cuándo conviene Prisma sobre queries SQL raw?
+  **R:** Cuando querés type-safety, autocompletado, y migraciones automáticas. SQL raw conviene para queries muy complejas (aggregations avanzadas, CTEs) que Prisma no soporta bien.
 
 ---
 
