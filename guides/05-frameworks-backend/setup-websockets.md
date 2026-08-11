@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué WebSockets?
+
+HTTP es request-response: el cliente pregunta, el servidor responde. Pero hay casos donde el servidor necesita enviar datos sin que el cliente los pida — notificaciones en tiempo real, chat, dashboards en vivo. WebSockets mantienen una conexión abierta y bidireccional. socket.io simplifica esto: agrega reconexión automática, rooms, y fallback a HTTP polling si WebSocket no está disponible.
+
+---
+
 ## Checklist
 
 ### 1. Instalar socket.io
@@ -90,6 +96,11 @@ io.on('connection', (socket) => {
 
 ### 6. Emitir desde el worker (BullMQ)
 
+- [ ] socket.io instalado y configurado con Express
+- [ ] Al hacer POST a `/api/users`, el navegador recibe evento `user:created`
+- [ ] Las rooms funcionan: `socket.join()` y `io.to().emit()` aíslan mensajes
+- [ ] El worker de BullMQ emite eventos WebSocket al completar jobs
+
 ```ts
 // src/workers/emailWorker.ts
 import { io } from '../app.js';
@@ -111,6 +122,36 @@ worker.on('completed', (job) => {
 ```
 
 **Si el navegador recibe eventos en tiempo real → WebSockets listos. ✅**
+
+---
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| `Client connected` nunca aparece en el log | Verificá que el CORS del servidor coincida con el origen del cliente (`origin: 'http://localhost:5173'`). Si no coincide, socket.io rechaza la conexión. |
+| El cliente no recibe eventos emitidos desde el controller | Asegurate de que el `io` exportado desde `app.ts` es la misma instancia que usa el controller. Un `new Server()` separado no comparte conexiones. |
+| `socket.join()` no funciona como esperado | Las rooms son case-sensitive. Verificá que el nombre de la room es exactamente el mismo en `join` y en `io.to()`. |
+| Reconexión infinita del cliente | Si el servidor se cae, socket.io reintenta indefinidamente. Configurá `reconnectionAttempts` y `reconnectionDelay` en el cliente para limitar reintentos. |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Qué diferencia hay entre HTTP y WebSockets?
+  **R:** HTTP es request-response (el cliente siempre inicia). WebSockets es bidireccional y persistente — ambos lados pueden enviar datos en cualquier momento.
+
+- **P:** ¿Para qué sirven las rooms en socket.io?
+  **R:** Para agrupar sockets y emitir mensajes a un subconjunto de clientes. Ej: todos los usuarios de un proyecto reciben notificaciones, pero no los de otros proyectos.
+
+- **P:** ¿Qué hace `socket.broadcast.emit()`?
+  **R:** Envía un evento a todos los clientes conectados EXCEPTO al socket que originó el evento. Útil para chat: todos ven el mensaje menos quien lo envió.
+
+- **P:** ¿Por qué usar socket.io en lugar del WebSocket nativo del navegador?
+  **R:** Porque agrega reconexión automática, fallback a HTTP polling, rooms, namespaces, y manejo de heartbeats — todo lo que tendrías que implementar manualmente.
+
+- **P:** ¿Cómo se integra WebSockets con una API REST?
+  **R:** REST maneja CRUD y operaciones síncronas. WebSockets notifican cambios en tiempo real. Ej: POST crea un recurso (REST) + `io.emit()` notifica a clientes conectados (WS).
 
 ---
 

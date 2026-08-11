@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué Mongoose?
+
+MongoDB es schemaless por naturaleza: acepta cualquier estructura de documento. Eso es flexible pero peligroso — nada te impide guardar un email sin validar o un documento sin campos requeridos. Mongoose agrega un schema layer sobre MongoDB: validaciones, tipos, defaults, hooks (`pre`/`post`), y el método `populate()` para relaciones entre colecciones. Es el estándar para MongoDB en Node desde hace una década.
+
+---
+
 ## Checklist
 
 ### 1. Instalar Mongoose
@@ -77,9 +83,9 @@ export const userRepository = {
 
 ### 5. Agregar `MONGO_URL` al `.env`
 
-```
-MONGO_URL=mongodb://localhost:27017/fullstack_dev
-```
+- [ ] `MONGO_URL=mongodb://localhost:27017/fullstack_dev` en `.env`
+- [ ] `connectMongo()` se llama antes de `app.listen()`
+- [ ] El log muestra "Connected to MongoDB" al arrancar
 
 ---
 
@@ -96,6 +102,36 @@ curl -X POST http://localhost:3000/users \
 ```
 
 **Si el server conecta a MongoDB y el POST crea un documento → Mongoose listo. ✅**
+
+---
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| `MongooseServerSelectionError: connect ECONNREFUSED` | MongoDB no está corriendo. Verificá con `docker ps` que el contenedor de MongoDB esté activo. |
+| `ValidationError: Path "email" is required` | El schema tiene `required: true` pero el request no envía el campo. Validá el body antes de llamar a `User.create()`. |
+| El password se guarda en texto plano | El hook `pre('save')` no se ejecuta con `User.create()` o `User.updateOne()`. Usá `new User(data).save()` o hasheá manualmente antes. |
+| `populate()` devuelve `null` | El campo de referencia no tiene un ObjectId válido, o la colección referenciada no existe. Verificá los datos con `npx mongo` o MongoDB Compass. |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Qué agrega Mongoose sobre MongoDB nativo?
+  **R:** Schemas con validación, tipos, defaults, hooks (`pre`/`post`), y `populate()` para relaciones. MongoDB nativo es schemaless — Mongoose agrega disciplina.
+
+- **P:** ¿Cómo funciona el hook `pre('save')`?
+  **R:** Se ejecuta antes de cada operación `save()` en un documento. Se usa comúnmente para hashear passwords, generar slugs, o validar datos antes de persistir.
+
+- **P:** ¿Qué significa `select: false` en un campo?
+  **R:** Que ese campo no se devuelve en las queries por defecto. Para datos sensibles como passwords — hay que pedirlo explícitamente con `.select('+password')`.
+
+- **P:** ¿Cuándo conviene Mongoose sobre Prisma?
+  **R:** Cuando tu base de datos es MongoDB y necesitás aggregations complejas, índices geoespaciales, o queries que el adapter de Prisma para Mongo no soporta bien.
+
+- **P:** ¿Por qué el hook `pre('save')` no se ejecuta con `User.create()`?
+  **R:** Porque `create()` usa `insertMany` internamente, que bypassa los hooks de documento. Para que el hook se ejecute, creá la instancia con `new User()` y llamá `.save()`.
 
 ---
 

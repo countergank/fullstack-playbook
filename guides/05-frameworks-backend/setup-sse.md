@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué SSE?
+
+WebSockets son bidireccionales pero requieren una librería extra, infraestructura adicional, y manejo manual de reconexión. SSE es más simple: usa HTTP común, el navegador se reconecta solo, y no necesitás ninguna librería en el cliente. Si solo necesitás que el servidor envíe datos al cliente (notificaciones, feeds, progreso), SSE es la solución más liviana.
+
+---
+
 ## Checklist
 
 ### 1. Crear el endpoint SSE
@@ -134,6 +140,36 @@ npm run dev
 ```
 
 **Si el navegador recibe eventos cada 5 segundos → SSE listo. ✅**
+
+---
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| El navegador no recibe eventos | Verificá los 3 headers obligatorios: `Content-Type: text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`. Sin ellos, el navegador no trata la respuesta como stream. |
+| El servidor acumula conexiones abiertas | Cada cliente SSE mantiene una conexión HTTP abierta. Usá un Set para trackear clientes y limpiá en `req.on('close')`. Sin cleanup, el server se satura. |
+| Los eventos no se reconectan después de un restart del server | `EventSource` reconecta automáticamente, pero pierde el estado. Usá `Last-Event-ID` para reanudar desde donde quedó. |
+| Proxy inverso (nginx) corta la conexión | Configurá `proxy_buffering off` y `proxy_read_timeout 86400s` en nginx para SSE. Los proxies suelen bufferizar y cortar streams largos. |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Qué es SSE y en qué se diferencia de WebSockets?
+  **R:** SSE (Server-Sent Events) es unidireccional (solo servidor → cliente). WebSockets es bidireccional. SSE usa HTTP común, WebSockets requiere un protocolo diferente.
+
+- **P:** ¿Qué headers son obligatorios para un endpoint SSE?
+  **R:** `Content-Type: text/event-stream`, `Cache-Control: no-cache`, y `Connection: keep-alive`.
+
+- **P:** ¿Por qué SSE se reconecta automáticamente?
+  **R:** Porque `EventSource` es una API nativa del navegador que implementa reconexión con backoff. WebSocket nativo no la incluye.
+
+- **P:** ¿Cuándo elegir SSE sobre WebSockets?
+  **R:** Cuando solo necesitás notificaciones del servidor al cliente (feeds, progreso, logs) y querés la solución más simple sin librerías ni infraestructura extra.
+
+- **P:** ¿Cómo se envían eventos con nombre en SSE?
+  **R:** Con `event: <nombre>\ndata: <payload>\n\n`. El cliente escucha con `source.addEventListener('nombre', callback)`.
 
 ---
 

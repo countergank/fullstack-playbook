@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué logging estructurado?
+
+`console.log` sirve para debuggear localmente, pero en producción necesitás logs que un sistema de monitoreo pueda indexar, buscar y graficar. Pino produce JSON estructurado con niveles, timestamps, y contexto (request ID, user ID, duración). Sin logging estructurado, debuggear un error en producción es como buscar una aguja en un pajar sin imán.
+
+---
+
 ## Checklist
 
 ### 1. Instalar Pino
@@ -98,10 +104,9 @@ logger.error({ err, requestId }, 'DB connection failed');
 
 ### 7. Agregar `NODE_ENV` y `LOG_LEVEL` al `.env`
 
-```
-NODE_ENV=development
-LOG_LEVEL=info
-```
+- [ ] `NODE_ENV=development` y `LOG_LEVEL=info` en `.env`
+- [ ] En desarrollo los logs se ven coloreados (pino-pretty)
+- [ ] En producción (`NODE_ENV=production`) los logs son JSON puro
 
 ---
 
@@ -113,6 +118,36 @@ curl http://localhost:3000/health
 ```
 
 **La terminal debe mostrar un log estructurado con request ID, método, URL, status y duración.** En desarrollo se ve coloreado (pino-pretty). En producción sería JSON puro.
+
+---
+
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| Los logs no muestran colores en desarrollo | Verificá que `NODE_ENV=development` en `.env` y que `pino-pretty` esté instalado (`npm ls pino-pretty`). |
+| `req.id` es `undefined` en el request logger | El middleware `requestId` debe registrarse ANTES que `requestLogger` en `app.ts`. El orden importa. |
+| `@types/pino` da error de tipos | Pino v9+ incluye tipos propios. Si usás v9+, remové `@types/pino`. Si usás v8, mantenelo. |
+| Los logs no incluyen el request ID | Asegurate de que `req.id` se asigna en el middleware `requestId` y que se pasa al logger: `logger.info({ requestId: req.id }, 'msg')`. |
+
+---
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué `console.log` no es suficiente en producción?
+  **R:** Produce texto plano sin estructura, sin niveles, sin request ID. Los sistemas de monitoreo no pueden indexarlo ni buscarlo eficientemente.
+
+- **P:** ¿Qué información debe tener cada log de producción?
+  **R:** Timestamp, nivel (info/error/warn), mensaje, request ID, y contexto relevante (método, URL, status, duración, user ID).
+
+- **P:** ¿Para qué sirve el request ID?
+  **R:** Identifica unívocamente cada request. Permite seguir todos los logs de un mismo request a través de múltiples servicios y encontrar la causa raíz de un error.
+
+- **P:** ¿Qué diferencia hay entre los niveles `error` y `fatal`?
+  **R:** `error` es algo que falló para un usuario/request específico (el server sigue funcionando). `fatal` es algo que impide que el servicio arranque o funcione (DB caída, config rota).
+
+- **P:** ¿Por qué Pino es más rápido que `console.log`?
+  **R:** Serializa a JSON de forma asíncrona con `sonic-boom` (I/O no bloqueante) y los transports corren en threads separados, sin bloquear el event loop.
 
 ---
 
