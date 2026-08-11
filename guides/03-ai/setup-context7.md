@@ -6,6 +6,12 @@
 
 ---
 
+## ¿Por qué Context7?
+
+Sin Context7, el agente de IA depende exclusivamente de su conocimiento de entrenamiento, que tiene fecha de corte y puede estar desactualizado. Esto genera alucinaciones: el agente inventa APIs, funciones o comportamientos que ya no existen o nunca existieron. Context7 resuelve esto indexando documentación oficial en tiempo real y exponiéndola como un servidor MCP. Cuando el agente necesita saber cómo usar Prisma, React, o cualquier librería, consulta Context7 primero y responde con información verificada, no inventada. Es la diferencia entre un asistente que "cree saber" y uno que "verifica antes de responder".
+
+---
+
 ## ¿Qué es Context7?
 
 Context7 es un servicio MCP que indexa documentación oficial de librerías y frameworks (React, Next.js, Prisma, Tailwind, Express, etc.) y la expone para que los agentes de IA la consulten. Sin Context7, el agente depende de su conocimiento de entrenamiento (que puede estar desactualizado). Con Context7, busca la doc VIVA y actualizada antes de responder.
@@ -65,7 +71,36 @@ Buscá en Context7 la documentación de Prisma para `create` con `connect`.
 
 ---
 
+## Problemas comunes
+
+| Problema | Solución |
+|----------|----------|
+| El agente no llama a Context7 automáticamente | Verificá que el servidor MCP está configurado en `opencode.json`. Reiniciar OpenCode después de agregar la config |
+| Context7 no encuentra una librería | No todas las librerías están indexadas. Podés pedirle a Context7 que la indexe usando `resolve-library-id` con el nombre del repo de GitHub |
+| Respuesta de Context7 lenta | Es normal la primera vez porque resuelve el library ID. Las consultas subsecuentes son más rápidas gracias al caching |
+| Error de conexión a `mcp.context7.com` | Verificar conexión a internet. Si el servicio está caído, el agente fallback a su conocimiento de entrenamiento (con riesgo de alucinación) |
+| Context7 devuelve doc desactualizada | Reportalo en el repo de Context7. El índice se actualiza periódicamente pero puede haber delay |
+
+---
+
 ## Recursos
 
 - [Context7](https://context7.com/)
 - [Context7 MCP](https://mcp.context7.com)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué problema resuelve Context7 en el flujo de desarrollo con IA?
+  **R:** Evita alucinaciones del agente al proveer documentación oficial actualizada de librerías y frameworks, en vez de depender del conocimiento de entrenamiento desactualizado.
+
+- **P:** ¿Cómo se configura Context7 en OpenCode?
+  **R:** Agregando un entry en la sección `mcp` de `~/.config/opencode/opencode.json` con `"type": "remote"` y `"url": "https://mcp.context7.com"`.
+
+- **P:** ¿Qué pasa si Context7 no tiene indexada una librería que necesitás?
+  **R:** Podés pedirle al agente que use `resolve-library-id` para intentar indexarla, o fallback a WebFetch para buscar la documentación manualmente.
+
+- **P:** ¿Por qué es importante verificar que Context7 responde antes de usarlo en trabajo real?
+  **R:** Porque si el servidor no está activo o la config está mal, el agente no tendrá acceso a doc actualizada y podría alucinar APIs sin que te des cuenta.
+
+- **P:** ¿Qué formato tiene el ID de una librería en Context7?
+  **R:** Sigue el formato `/org/proyecto`, por ejemplo `/vercel/next.js` para Next.js o `/prisma/docs` para Prisma.
