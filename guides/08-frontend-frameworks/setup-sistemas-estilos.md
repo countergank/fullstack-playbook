@@ -209,3 +209,23 @@ npm run dev         # http://localhost:5173
 - [Tailwind CSS — instalación con Vite](https://tailwindcss.com/docs/installation/using-vite)
 - [Tailwind CSS — utility classes](https://tailwindcss.com/docs/utility-first)
 - [styled-components — basics](https://styled-components.com/docs/basics)
+
+## Preguntas de repaso
+
+- **P:** ¿Cómo evita CSS Modules que los nombres de clase se pisen entre componentes?
+  **R:** Hashea cada clase en build time: `.button` se convierte en algo como `Button_button__k3y1x`. Cada archivo tiene su propio namespace automático.
+
+- **P:** ¿Qué diferencia hay entre la configuración de Tailwind v3 y v4 con Vite?
+  **R:** En v4 no hace falta `tailwind.config.js` ni las directivas `@tailwind base/components/utilities`. Solo se importa `tailwindcss` y se registra el plugin `@tailwindcss/vite` en la config de Vite.
+
+- **P:** ¿Qué es una prop "transient" en styled-components y por qué se usa `$`?
+  **R:** Es una prop que styled-components usa para el estilo pero NO reenvía al DOM. El prefijo `$` indica que es transient: `<Button $variant="primary">` no genera `variant="primary"` en el HTML.
+
+- **P:** ¿Por qué el build de Tailwind genera un CSS mínimo?
+  **R:** Porque escanea tu código y purga (elimina) todas las clases utilitarias que no usaste. Solo quedan las que realmente están en tu JSX.
+
+- **P:** Si las tres estrategias conviven en una misma página, ¿pueden pisarse los estilos?
+  **R:** Tailwind es global y puede afectar elementos sin clases específicas. CSS Modules y styled-components son escopados. La regla es elegir UNA estrategia por proyecto para evitar conflictos.
+
+- **P:** ¿Qué desventaja tiene styled-components respecto a CSS Modules en términos de bundle?
+  **R:** styled-components agrega runtime JS extra al bundle porque genera estilos dinámicamente. CSS Modules no tiene runtime: el CSS se genera en build time.
