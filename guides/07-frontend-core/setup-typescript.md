@@ -166,3 +166,20 @@ npm run build
 - [TypeScript — get started](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html)
 - [TypeScript — tsconfig reference](https://www.typescriptlang.org/tsconfig/)
 - [MDN — ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+## Preguntas de repaso
+
+- **P:** ¿Qué pasa con los tipos de TypeScript cuando el código corre en el navegador?
+  **R:** Desaparecen. TypeScript hace "type erasure" en compilación: borra todas las anotaciones de tipo y emite JavaScript puro. Los tipos solo existen en tiempo de desarrollo.
+
+- **P:** ¿Por qué necesitás `"lib": ["ES2020", "DOM"]` en el tsconfig?
+  **R:** Sin `"DOM"`, TypeScript no conoce `fetch`, `document`, `console` ni las Web APIs. Sin `"ES2020"`, no reconoce métodos modernos de arrays como `flat()` o `Promise.allSettled`.
+
+- **P:** ¿Qué hace `strict: true` en el tsconfig?
+  **R:** Activa todas las opciones estrictas: `strictNullChecks` (null/undefined no son asignables a otros tipos), `noImplicitAny` (prohíbe tipos `any` implícitos), y otras. Es la red de seguridad completa.
+
+- **P:** ¿Por qué el HTML carga `dist/app.js` y nunca `src/app.ts`?
+  **R:** Porque el navegador no entiende TypeScript. `tsc` compila el `.ts` a `.js` borrando los tipos. El HTML siempre carga el producto compilado.
+
+- **P:** ¿Qué diferencia hay entre `outDir` y `rootDir` en el tsconfig?
+  **R:** `rootDir` es la carpeta de entrada donde están los `.ts` (ej: `src`). `outDir` es la carpeta de salida donde se generan los `.js` compilados (ej: `dist`). La estructura de carpetas se replica.

@@ -177,3 +177,20 @@ Revisá también que ningún elemento desborde la ventana horizontalmente (resul
 - [MDN — Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
 - [MDN — Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)
 - [MDN — clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
+
+## Preguntas de repaso
+
+- **P:** ¿Cuándo usás Flexbox y cuándo Grid?
+  **R:** Flexbox para alinear items en una dimensión (una fila o columna): navbars, botones, cards en fila. Grid para layouts de dos dimensiones (filas Y columnas): la estructura general de la página con sidebar y contenido.
+
+- **P:** ¿Qué hace `box-sizing: border-box` y por qué es útil?
+  **R:** Hace que `width` incluya padding y border, no solo el content box. Esto evita desbordes: un elemento con `width: 100%` y `padding: 1rem` no se sale del contenedor.
+
+- **P:** ¿Qué significa `1fr` en `grid-template-columns: 200px 1fr 200px`?
+  **R:** "Una fracción del espacio restante". Después de asignar 200px a cada columna fija, el `1fr` ocupa todo el espacio que sobra.
+
+- **P:** ¿Por qué `clamp()` es mejor que media queries para tipografía fluida?
+  **R:** `clamp(min, ideal, max)` escala continuamente con el viewport sin necesidad de breakpoints. Las media queries cambian en puntos fijos; `clamp` es suave y requiere menos código.
+
+- **P:** ¿Qué pasa si ponés el `@media` query ANTES de la regla base en CSS?
+  **R:** No funciona como mobile-first. El cascade aplica las reglas en orden: la regla base debe ir primero (móvil) y el `@media (min-width)` después (desktop). Si los invertís, el desktop se sobrescribe con el mobile.

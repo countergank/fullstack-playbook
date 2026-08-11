@@ -168,3 +168,20 @@ Y llamalo al final de `cargarUsuarios()`.
 - [MDN — Array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 - [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 - [Chrome DevTools — Console](https://developer.chrome.com/docs/devtools/console/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué `const` es preferible a `let` como regla general?
+  **R:** `const` previene reasignaciones accidentales y comunica intención clara. Usás `let` solo cuando necesitás reasignar (contadores, flags). `var` tiene scope de función y hoisting tramposo — nunca se usa en código moderno.
+
+- **P:** ¿Qué devuelve `res.json()` y por qué necesita su propio `await`?
+  **R:** Devuelve una Promise que resuelve al body parseado como JSON. Necesita `await` porque el parsing es asíncrono — el body puede ser grande y el main thread no debe bloquearse.
+
+- **P:** ¿Qué diferencia hay entre `map`, `filter` y `reduce`?
+  **R:** `map` transforma cada elemento y devuelve un array del mismo largo. `filter` selecciona elementos que cumplen una condición y devuelve un array más corto. `reduce` acumula todos los elementos en un solo valor (número, objeto, string).
+
+- **P:** ¿Por qué `fetch` no lanza error en un 404?
+  **R:** `fetch` solo rechaza la Promise en fallos de red (sin conexión, DNS inválido). Un 404 es una respuesta HTTP válida del servidor. Siempre hay que chequear `res.ok` manualmente.
+
+- **P:** ¿Para qué sirve `console.table` y cuándo lo usás?
+  **R:** Imprime arrays de objetos en formato tabla legible en la consola. Es ideal para inspeccionar datos de APIs (como usuarios, productos) porque muestra cada propiedad como columna.

@@ -173,3 +173,20 @@ xdg-open index.html
 - [MDN — HTML Semantics](https://developer.mozilla.org/en-US/docs/Glossary/Semantics)
 - [MDN — Elementos de sección](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements)
 - [W3C — Nu HTML Validator](https://validator.w3.org/nu/)
+
+## Preguntas de repaso
+
+- **P:** ¿Por qué `<header>` es mejor que `<div class="cabecera">`?
+  **R:** `<header>` comunica semánticamente que es la cabecera de la página o sección. Los buscadores, lectores de pantalla y otros developers entienden qué ES sin mirar CSS. Un `<div>` es genérico y no dice nada.
+
+- **P:** ¿Cuántos `<h1>` debe tener una página y qué pasa si ponés más?
+  **R:** Exactamente uno. Múltiples `<h1>` confunden la jerarquía del documento, penalizan SEO y hacen que los lectores de pantalla anuncien mal la estructura.
+
+- **P:** ¿Cómo asociás un `<label>` a un `<input>` correctamente?
+  **R:** Usando `for` en el label que apunta al `id` del input: `<label for="email">Email</label>` + `<input id="email">`. Esto permite clic en el label para enfocar el input y anuncia el campo en lectores de pantalla.
+
+- **P:** ¿Qué diferencia hay entre `<section>` y `<article>`?
+  **R:** `<section>` agrupa contenido temático con su propio heading (h2-h6). `<article>` envuelve contenido autocontenido que tiene sentido por sí solo (un post, una noticia). Un article puede tener sections dentro.
+
+- **P:** ¿Para qué sirve `<fieldset>` y `<legend>` en un formulario?
+  **R:** `<fieldset>` agrupa campos relacionados y `<legend>` pone un título al grupo. Los lectores de pantalla anuncian el legend cuando el usuario navega por los campos del grupo.

@@ -44,6 +44,27 @@
 </header>
 ```
 
+> [MDN — Semantic HTML](https://developer.mozilla.org/en-US/docs/Glossary/Semantics)
+
+*Técnicamente:* El parser HTML del navegador construye el DOM tree token por token. Cada etiqueta semántica mapea a un `HTMLElement` con un `role` ARIA implícito: `<nav>` → `role="navigation"`, `<main>` → `role="main"`, `<article>` → `role="article"`. Los screen readers (NVDA, VoiceOver) consultan la Accessibility Tree — derivada del DOM — y anuncian estos roles al usuario. Un `<div>` tiene `role="generic"`: no comunica nada. El validador W3C Nu también rechaza estructuras inválidas como `<section>` sin heading o múltiples `<main>`.
+
+> **Check de comprensión**
+> 1. ¿Por qué `<article>` es mejor que `<div class="post">`? Mencioná al menos dos consumidores que se benefician.
+>    - R: `<article>` comunica explícitamente que el contenido es autocontenido. Beneficia a: (1) buscadores que indexan contenido independiente, (2) lectores de pantalla que anuncian la estructura semántica, (3) otros developers que leen el markup sin CSS.
+> 2. ¿Cuántos `<h1>` debe tener una página y por qué?
+>    - R: Exactamente uno. El `<h1>` representa el tema principal del documento; múltiples h1 confunden la jerarquía y penalizan SEO y accesibilidad.
+> 3. ¿Cuál es la diferencia entre `<section>` y `<div>`?
+>    - R: `<section>` agrupa contenido temático con su propio heading (h2-h6), mientras que `<div>` es un contenedor genérico sin significado semántico.
+> 4. ¿Por qué `<label for="email">` es mejor que poner el texto al lado del input sin label?
+>    - R: El `for` vincula el label al input por su `id`: (1) clic en el label enfoca el input, (2) lectores de pantalla anuncian "Email, edit text", (3) es requisito WCAG 2.1.
+> 5. ¿Qué elemento usarías para una imagen con leyenda descriptiva?
+>    - R: `<figure>` envuelve la imagen y `<figcaption>` provee la leyenda. Es semánticamente correcto y asociado.
+> 6. Si un contenido es complementario pero no esencial (como un sidebar con links relacionados), ¿qué etiqueta usás?
+>    - R: `<aside>` — indica contenido tangencial al contenido principal.
+
+→ Ver [Tópico 6: Bases de Datos](../concepts/06-bases-datos.md#6.1-modelado-relacional) — los formularios que validás en el frontend envían datos a modelos relacionales en el backend.
+→ Ver [Tópico 1: Fundamentos Web](../concepts/01-fundamentos-web.md#1.7-http) — el HTML viaja como body de respuestas HTTP desde el servidor al navegador.
+
 ---
 
 ## 7.2 CSS Moderno
@@ -122,6 +143,29 @@ Usalo cuando la página o una sección tiene **filas Y columnas** simultáneas.
 - **`min()` / `max()`**: `width: min(100%, 1200px);` — el ancho no pasa de 1200px pero nunca desborda.
 - **Flexbox vs Grid**: si tenés dudas, Grid para la estructura de la página, Flexbox para alinear items dentro de un componente. Ambos se usan juntos todo el tiempo.
 
+> [MDN — Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
+> [MDN — Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout)
+> [MDN — clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
+
+*Técnicamente:* Flexbox usa un algoritmo de layout de una dimensión definido en la spec CSS Flexible Box Layout Module Level 1. El navegador calcula el `main-size` de cada flex item resolviendo `flex-grow`, `flex-shrink` y `flex-basis` en un proceso de "flexing" iterativo. Grid opera con un algoritmo de dos dimensiones (CSS Grid Layout Level 2) donde el track sizing resuelve `minmax()`, `fr` units y `auto` en tres passes: intrinsic sizing, max-content contribution, y fr distribution. Los media queries se evalúan en el CSS cascade: el navegador recalcula el style tree cuando el viewport cruza un breakpoint, disparando reflow. `clamp(min, preferred, max)` es equivalente a `max(min, min(max, preferred, max), min)` — una función CSS nativa resuelta en layout time, no en JS.
+
+> **Check de comprensión**
+> 1. ¿Cuándo usás Flexbox y cuándo Grid? Dá un ejemplo concreto de cada uno.
+>    - R: Flexbox para alinear items en una dimensión (navbar, botones en fila). Grid para layouts de dos dimensiones (página con sidebar + contenido + footer). Ejemplo: navbar con `display: flex; justify-content: space-between`; layout de página con `display: grid; grid-template-columns: 200px 1fr`.
+> 2. ¿Qué significa `1fr` en `grid-template-columns: 200px 1fr 200px`?
+>    - R: "Una fracción del espacio restante". Después de asignar 200px a cada sidebar, el `1fr` ocupa todo lo que sobra.
+> 3. ¿Por qué mobile-first es mejor que desktop-first?
+>    - R: Porque escribís los estilos base para el dispositivo más limitado y con `min-width` vas agregando complejidad. Es más fácil mantener y los móviles cargan menos CSS innecesario.
+> 4. ¿Qué hace `clamp(1rem, 2vw, 1.5rem)` exactamente?
+>    - R: Establece un font-size con mínimo 1rem, ideal 2vw del viewport, y máximo 1.5rem. El navegador elige el valor intermedio acotado por los extremos.
+> 5. ¿Qué diferencia hay entre `justify-content` y `align-items` en Flexbox?
+>    - R: `justify-content` distribuye items en el eje principal (horizontal en row), `align-items` los alinea en el eje cruzado (vertical en row).
+> 6. ¿Qué pasa si usás `px` para tamaños de texto en lugar de `rem`?
+>    - R: El texto no escala con las preferencias del usuario (zoom del navegador, configuración de font-size base). `rem` respeta el font-size del root y es accesible.
+
+→ Ver [Tópico 8: Frameworks Frontend](../concepts/08-frameworks-herramientas-frontend.md#8.2-componentes) — los frameworks usan CSS-in-JS o utility classes pero el layout sigue siendo Flexbox/Grid por debajo.
+→ Ver [Tópico 7.6: Accesibilidad](../concepts/07-frontend-core.md#7.6-accesibilidad-a11y) — el contraste de colores y el focus visible se resuelven con CSS.
+
 ---
 
 ## 7.3 JavaScript (ECMAScript moderno)
@@ -177,6 +221,29 @@ const totalAge = users.reduce((acc, u) => acc + u.age, 0); // acumular → 75
 const found = users.find(u => u.name === 'Ana');      // encontrar 1 → objeto
 const hasYoung = users.some(u => u.age < 30);         // alguno cumple → false
 ```
+
+> [MDN — ES6+](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide)
+> [MDN — async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+> [MDN — Array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+*Técnicamente:* El Event Loop de JS procesa tareas en un solo thread: el call stack ejecuta código síncrono, y las operaciones asíncronas (fetch, setTimeout, I/O) se delegan a Web APIs del navegador. Cuando completan, sus callbacks se encolan en la task queue (macrotasks) o microtask queue (Promises). El event loop vacía primero la microtask queue — por eso las Promises tienen prioridad sobre `setTimeout(fn, 0)`. `async/await` es syntax sugar sobre Promises: el compilador V8 transforma `await expr` en una cadena `.then()` con estado suspendido. Los métodos de array (`map`, `filter`, `reduce`) son funciones de orden superior que reciben callbacks y retornan nuevos arrays sin mutar el original — programación funcional pura.
+
+> **Check de comprensión**
+> 1. ¿Por qué `const` es preferible a `let` como regla general?
+>    - R: `const` previene reasignaciones accidentales y comunica intención: ese binding no cambia. Usás `let` solo cuando necesitás reasignar (contadores, flags). `var` tiene scope de función y hoisting tramposo — nunca se usa en código moderno.
+> 2. ¿Qué devuelve `res.json()` y por qué necesita `await`?
+>    - R: Devuelve una Promise que resuelve al body parseado como JSON. Necesita `await` porque el parsing es asíncrono — el body puede ser grande y el main thread no debe bloquearse.
+> 3. ¿Cuándo usás `Promise.all` en lugar de múltiples `await` secuenciales?
+>    - R: Cuando las llamadas son independientes entre sí. `Promise.all([fetchA(), fetchB()])` ejecuta ambas en paralelo. Dos `await` secuenciales suman latencia: A espera, luego B espera.
+> 4. ¿Qué hace `reduce` y en qué se diferencia de `map`?
+>    - R: `reduce` acumula un array en un solo valor (número, objeto, string). `map` transforma cada elemento y devuelve un array del mismo largo. Ejemplo: `reduce` suma edades, `map` extrae nombres.
+> 5. ¿Qué es el "callback hell" y cómo lo resolvés con async/await?
+>    - R: Es anidar callbacks dentro de callbacks (getUser → getPosts → render), creando pirámides ilegibles. `async/await` lo convierte en código lineal: `const user = await getUser(); const posts = await getPosts(user.id);`.
+> 6. ¿Por qué los arrow functions no tienen su propio `this`?
+>    - R: Capturan el `this` léxico del contexto donde se definen. Esto evita el bug clásico de `this` perdiéndose dentro de callbacks o event handlers.
+
+→ Ver [Tópico 4: Backend Core](../concepts/04-backend-core.md#4.3-node-js) — Node.js usa el mismo Event Loop y las mismas Promises que el navegador.
+→ Ver [Tópico 8: Frameworks Frontend](../concepts/08-frameworks-herramientas-frontend.md#8.1-react) — React abstrae la manipulación del DOM pero usa JS moderno (hooks, async) por debajo.
 
 ---
 
@@ -236,6 +303,28 @@ const firstUser = first<User>([user]);  // firstUser: User | undefined
 
 En TS no importa el NOMBRE de la clase, importa la FORMA: si un objeto tiene las propiedades requeridas, es compatible. Esto se llama **duck typing estructural** — y es la razón por la que tipás tu API en el backend con Prisma y los mismos shapes fluyen al frontend sin fricción.
 
+> [TypeScript — Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+> [TypeScript — Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)
+
+*Técnicamente:* TypeScript es un superset tipado de JavaScript que usa inferencia de tipos Hindley-Milner simplificada. El compilador `tsc` realiza type checking estático sin emitir código runtime: los tipos se "borran" (type erasure) y el output es JS puro. El structural typing significa que `{ name: string; age: number }` es compatible con cualquier objeto que tenga esas propiedades, sin importar si viene de una `class`, un `interface` o un literal. El flag `strict: true` activa `strictNullChecks` (null/undefined no son asignables a otros tipos), `noImplicitAny` (prohíbe tipos implícitos `any`), y `strictFunctionTypes` (contravarianza en parámetros). Los generics permiten parametrizar tipos: `Array<T>` es un contenedor cuyo tipo se resuelve en el uso (`Array<User>` → `T = User`).
+
+> **Check de comprensión**
+> 1. ¿Qué pasa con los tipos de TypeScript cuando el código corre en el navegador?
+>    - R: Desaparecen. TypeScript hace "type erasure" en compilación: borra todas las anotaciones de tipo y emite JavaScript puro. Los tipos solo existen en tiempo de desarrollo.
+> 2. ¿Cuándo usás `interface` y cuándo `type`?
+>    - R: `interface` para shapes de objetos y entidades (es declarativo y extensible con `extends`). `type` para unions (`string | number`), tuplas, y alias compuestos. Regla: interface por defecto para objetos, type para el resto.
+> 3. ¿Qué significa que TypeScript use "tipado estructural"?
+>    - R: Que la compatibilidad depende de la FORMA del objeto (sus propiedades y tipos), no de su nombre o clase. Si un objeto tiene `{ id: number; name: string }`, es compatible con cualquier interface que espere esa forma.
+> 4. ¿Qué hace `strict: true` en el tsconfig?
+>    - R: Activa todas las opciones estrictas: `strictNullChecks` (null/undefined separados), `noImplicitAny` (prohíbe any implícito), `strictFunctionTypes`, entre otras. Es la red de seguridad completa.
+> 5. ¿Qué es un generic y para qué sirve?
+>    - R: Un tipo parametrizable con una variable (`T`) que se resuelve en el uso. Ejemplo: `function first<T>(items: T[]): T` — si le pasás `User[]`, `T` se resuelve como `User` y el retorno es `User | undefined`.
+> 6. ¿Por qué `readonly email: string` no es lo mismo que `const email: string`?
+>    - R: `readonly` en una interface prohíbe reasignar esa propiedad en el objeto (`user.email = "x"` tira error). `const` prohíbe reasignar la variable (`email = "x"`). Son niveles distintos de inmutabilidad.
+
+→ Ver [Tópico 4: Backend Core](../concepts/04-backend-core.md#4.3-node-js) — TypeScript se usa tanto en frontend como en backend; el mismo tsconfig puede compartirse.
+→ Ver [Tópico 8: Frameworks Frontend](../concepts/08-frameworks-herramientas-frontend.md#8.1-react) — React con TypeScript tipa props, state y hooks.
+
 ---
 
 ## 7.5 DOM (Document Object Model)
@@ -290,6 +379,28 @@ list.addEventListener('click', (event) => {
 - **`textContent` > `innerHTML`** cuando no necesitás HTML.
 - Los frameworks (tema 8) existen en gran parte para resolver estas operaciones de forma eficiente y declarativa — pero no sabés por qué, hasta que viste el costo manual.
 
+> [MDN — DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
+> [MDN — Events](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
+
+*Técnicamente:* El DOM es una API en forma de árbol donde cada nodo hereda de `Node` → `Element` → `HTMLElement`. `querySelector` usa el motor Selector API del navegador (Sizzle-like, nativo en C++). `addEventListener` registra un callback en el event dispatcher del elemento; el evento viaja en dos fases: capture (de window al target) y bubble (del target a window). `event.target` es el nodo donde ocurrió el evento real; `event.currentTarget` es el nodo donde está registrado el listener. `closest()` sube el árbol desde el elemento actual buscando un selector. Cada manipulación del DOM (`append`, `remove`, `innerHTML`) puede disparar reflow (recalcular geometría) y repaint (redibujar píxeles) — operaciones O(n) en el tamaño del subtree afectado.
+
+> **Check de comprensión**
+> 1. ¿Qué es el event bubbling y por qué es útil?
+>    - R: Es el fenómeno donde un evento sube del elemento donde ocurrió (target) hacia sus ancestros hasta `window`. Es útil porque permite event delegation: un solo listener en el padre maneja eventos de todos los hijos, presentes y futuros.
+> 2. ¿Por qué `textContent` es más seguro que `innerHTML`?
+>    - R: `textContent` inserta texto plano sin interpretar HTML. `innerHTML` parsea y renderiza HTML, lo que permite inyección de scripts maliciosos (XSS) si el contenido viene del usuario.
+> 3. ¿Qué diferencia hay entre `querySelector` y `getElementById`?
+>    - R: `getElementById` solo busca por ID y es más rápido. `querySelector` acepta cualquier selector CSS (clases, atributos, pseudo-clases) pero es más lento. Ambos devuelven un solo elemento.
+> 4. ¿Qué es reflow y por qué es caro?
+>    - R: Reflow es el recálculo de la geometría del layout (posiciones y tamaños de elementos). Es caro porque el navegador debe recorrer el DOM, calcular estilos, y reorganizar el render tree. Múltiples cambios al DOM disparan múltiples reflows.
+> 5. ¿Qué hace `event.target.closest('.item')`?
+>    - R: Sube el árbol del DOM desde `event.target` buscando el primer ancestro (o el mismo elemento) que matchee `.item`. Devuelve `null` si no encuentra ninguno.
+> 6. ¿Por qué los frameworks existen si podés manipular el DOM a mano?
+>    - R: Porque manipular el DOM manualmente es verboso, propenso a errores, y no escala. Los frameworks abstraen las operaciones del DOM con un modelo declarativo (estado → UI) y optimizan los updates (virtual DOM, signals, fine-grained reactivity).
+
+→ Ver [Tópico 5: WebSockets](../concepts/05-frameworks-backend.md#5.8-websockets) — los WebSockets actualizan el DOM en tiempo real sin recargar.
+→ Ver [Tópico 8: Frameworks Frontend](../concepts/08-frameworks-herramientas-frontend.md#8.3-renderizado) — React/Vue abstraen el DOM manual con un modelo declarativo.
+
 ---
 
 ## 7.6 Accesibilidad (a11y)
@@ -324,6 +435,28 @@ list.addEventListener('click', (event) => {
 3. ¿Todo input tiene `<label>`?
 4. ¿Las imágenes informativas tienen `alt` descriptivo?
 5. ¿La app funciona con un lector de pantalla? (probá el [screen reader emulator de Chrome](https://developer.chrome.com/docs/devtools/accessibility/reference/) en DevTools)
+
+> [W3C — WCAG 2.2](https://www.w3.org/TR/WCAG22/)
+> [MDN — Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
+
+*Técnicamente:* WCAG 2.2 define tres niveles de conformidad (A, AA, AAA) con criterios medibles. El nivel AA (el estándar legal en la mayoría de países) exige: contraste ≥ 4.5:1 para texto normal, ≥ 3:1 para texto grande; todo contenido operable por teclado; labels asociados a inputs; y jerarquía de headings lógica. La Accessibility Tree es un subárbol del DOM que los screen readers consumen: cada nodo tiene un `role` (implícito por el elemento HTML o explícito via ARIA), un `name` (texto anunciado), y propiedades como `checked`, `expanded`, `value`. ARIA (Accessible Rich Internet Applications) extiende la semántica HTML con `role`, `aria-*` attributes, y estados. Regla de oro de ARIA: si un elemento HTML nativo resuelve el caso (`<button>`, `<nav>`, `<main>`), NO uses ARIA — el HTML ya comunica el role correcto.
+
+> **Check de comprensión**
+> 1. ¿Por qué un `<div onclick="...">` es inaccesible comparado con un `<button>`?
+>    - R: El `<button>` nativo es: (1) tabulable con teclado, (2) activable con Enter y Espacio, (3) anunciado como "button" por lectores de pantalla, (4) tiene focus visible. Un `<div>` con onclick no tiene ninguna de estas propiedades.
+> 2. ¿Cuál es el ratio mínimo de contraste WCAG AA para texto normal?
+>    - R: 4.5:1. Para texto grande (18pt+ o 14pt bold) el mínimo es 3:1.
+> 3. ¿Cuándo deberías usar ARIA?
+>    - R: Solo cuando HTML nativo no alcanza. Ejemplo: un toggle custom necesita `role="switch"` y `aria-checked`. Si un `<button>` o `<input type="checkbox">` resuelve el caso, no uses ARIA.
+> 4. ¿Qué hace `alt=""` (alt vacío) en una imagen?
+>    - R: Indica que la imagen es decorativa y los screen readers la ignoran. Si la imagen tiene información, el `alt` debe describirla brevemente.
+> 5. ¿Por qué no debés usar `outline: none` sin reemplazo?
+>    - R: Porque elimina el indicador visual de foco, haciendo imposible saber qué elemento está seleccionado al navegar con Tab. Si querés customizarlo, usá `:focus-visible` con un estilo alternativo.
+> 6. ¿Qué es la Accessibility Tree?
+>    - R: Es un subárbol derivado del DOM que los screen readers consumen. Cada nodo tiene un role, un nombre accesible, y propiedades (checked, expanded, etc.). Se construye a partir de la semántica HTML + atributos ARIA.
+
+→ Ver [Tópico 7.1: HTML Semántico](../concepts/07-frontend-core.md#7.1-html-semántico) — la semántica es el pilar #1 de accesibilidad.
+→ Ver [Tópico 8: Frameworks Frontend](../concepts/08-frameworks-herramientas-frontend.md#8.4-testing) — las herramientas de testing incluyen auditorías de accesibilidad automatizadas.
 
 ---
 
@@ -368,12 +501,27 @@ if (!res.ok) {
 - **`res.json()` es asíncrono** — devuelve una Promise. Olvidar el `await` es un bug clásico.
 - **CORS aplica**: si consumís otra origin, el servidor debe permitirlo (concept 1.8).
 
----
+> [MDN — Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+> [MDN — Web Storage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
+> [MDN — IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 
-> **Check de comprensión**:
-> 1. ¿Por qué `<button>` es mejor que un `<div>` con `onclick`? Mencioná por lo menos dos razones.
-> 2. Tenés una navbar con logo, links y un botón, todos en una fila. ¿Flexbox o Grid? ¿Y para el layout general de la página con sidebar?
-> 3. ¿Qué diferencia hay entre `map`, `filter` y `reduce`? Escribí un ejemplo de cada uno de memoria.
-> 4. ¿Qué pasa con los tipos de TypeScript en producción? ¿Corren en el navegador?
-> 5. ¿Qué es el event bubbling y cómo lo aprovecha la event delegation?
-> 6. ¿Por qué `res.json()` dentro de un `fetch` necesita su propio `await`?
+*Técnicamente:* `fetch` usa la Fetch API del navegador, que devuelve una `Response` object con propiedades como `ok` (boolean, true si status 200-299), `status`, `statusText`, y métodos como `.json()`, `.text()`, `.blob()` — todos asíncronos. `localStorage` y `sessionStorage` implementan la Web Storage API con un límite de ~5MB por origin, sincrona y string-only (objetos requieren `JSON.stringify`). `IntersectionObserver` registra un callback que se dispara cuando un target cruza el threshold de visibilidad respecto al root (default: viewport). Es asíncrono y no bloquea el main thread — a diferencia de escuchar `scroll` events, que disparan reflow en cada frame. `navigator.geolocation` usa GPS/WiFi/cell triangulation del dispositivo y requiere permiso explícito del usuario (HTTPS obligatorio).
+
+> **Check de comprensión**
+> 1. ¿Por qué `fetch` no lanza error en un 404 y cómo lo manejás?
+>    - R: `fetch` solo rechaza la Promise en fallos de red (sin conexión, DNS inválido). Un 404 es una respuesta HTTP válida. Se maneja chequeando `res.ok` o `res.status` después del await.
+> 2. ¿Qué tipo de datos guarda `localStorage` y cómo persistís un objeto?
+>    - R: Solo strings. Para objetos: `localStorage.setItem('user', JSON.stringify(user))` al guardar, y `JSON.parse(localStorage.getItem('user'))` al leer.
+> 3. ¿Qué ventaja tiene `IntersectionObserver` sobre escuchar el evento `scroll`?
+>    - R: `IntersectionObserver` es asíncrono y no bloquea el main thread. Escuchar `scroll` dispara un handler en cada frame del scroll, lo que causa reflow y jank. El observer solo notifica cuando el elemento cruza el threshold.
+> 4. ¿Por qué `navigator.geolocation` requiere HTTPS?
+>    - R: Porque la ubicación es información sensible. Los navegadores bloquean APIs de geolocalización en contextos no seguros (http:// o file://) para proteger la privacidad del usuario.
+> 5. ¿Qué devuelve `res.json()` y por qué es asíncrono?
+>    - R: Devuelve una Promise que resuelve al body parseado como JSON. Es asíncrono porque el body puede ser grande y el parsing no debe bloquear el main thread.
+> 6. ¿Cuál es la diferencia entre `localStorage` y `sessionStorage`?
+>    - R: `localStorage` persiste entre sesiones (sobrevive al cerrar el navegador). `sessionStorage` se borra al cerrar la pestaña. Ambos tienen el mismo API y límite de ~5MB.
+
+→ Ver [Tópico 1: CORS](../concepts/01-fundamentos-web.md#1.8-cors) — fetch a otra origin requiere que el servidor envíe headers CORS.
+→ Ver [Tópico 4: Backend Core](../concepts/04-backend-core.md#4.2-apis-rest) — el fetch del frontend consume las APIs REST del backend.
+
+---
