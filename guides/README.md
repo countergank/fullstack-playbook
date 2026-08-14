@@ -120,6 +120,56 @@ Las guides son **checklists accionables** para preparar tu entorno a medida que 
 | `08-frontend-frameworks/setup-nextjs.md` | ✅ Lista | Node, React |
 | `08-frontend-frameworks/setup-sistemas-estilos.md` | ✅ Lista | React |
 
+### 09 — DevOps & Deployment
+
+> 📋 Orden de ejecución: [`09-devops/README.md`](09-devops/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `09-devops/setup-docker.md` | ✅ Lista | Docker (02) |
+| `09-devops/setup-ci-cd-github-actions.md` | ✅ Lista | Docker |
+| `09-devops/setup-monitoring-logging.md` | ✅ Lista | Docker, CI/CD |
+
+### 10 — Testing
+
+> 📋 Orden de ejecución: [`10-testing/README.md`](10-testing/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `10-testing/setup-vitest.md` | ✅ Lista | Node |
+| `10-testing/setup-jest.md` | ✅ Lista | Node |
+| `10-testing/setup-playwright-e2e.md` | ✅ Lista | Node |
+
+### 11 — Arquitectura de Software
+
+> 📋 Orden de ejecución: [`11-architecture/README.md`](11-architecture/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `11-architecture/setup-estructura-proyecto.md` | ✅ Lista | Backend Express (04) |
+
+### 12 — Seguridad
+
+> 📋 Orden de ejecución: [`12-security/README.md`](12-security/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `12-security/setup-seguridad-express.md` | ✅ Lista | Express (04) |
+| `12-security/setup-hashing-bcrypt.md` | ✅ Lista | Express |
+
+### 13 — Performance & Optimización
+
+> 📋 Orden de ejecución: [`13-performance/README.md`](13-performance/README.md)
+
+| Guía | Estado | Depende de |
+|------|--------|------------|
+| `13-performance/setup-bundle-analysis.md` | ✅ Lista | Frontend con Vite (08) |
+| `13-performance/setup-db-indexing-n1.md` | ✅ Lista | Base de datos + ORM (06) |
+
+### 14 — Prácticas Profesionales
+
+> 📌 **Sin guides.** Este tópico es conceptual: no hay herramientas que instalar. Ver [`concepts/14-practicas-profesionales.md`](../concepts/14-practicas-profesionales.md).
+
 ---
 
 ## Verificación general del entorno
