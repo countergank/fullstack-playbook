@@ -16,7 +16,7 @@ En el tópico 2 Docker te levantaba bases de datos ajenas. Acá el objetivo es d
 
 ### 1. Crear el proyecto de práctica
 
-- [ ] Creá `~/proyectos/devops-deploy` y adentro una app Node con un `npm run build` (podés copiar la app del tópico 8).
+- [ ] Creá `~/proyectos/mi-app` y adentro una app Node con un `npm run build` (podés copiar la app del tópico 8).
 - [ ] Verificá que `npm run build` genere una carpeta de artefactos (`dist/` o `.next/`).
 
 ### 2. Escribir el `.dockerignore`

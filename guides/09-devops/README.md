@@ -7,7 +7,7 @@
 - Concepto 09 completo (leelo antes de ejecutar estas guías).
 - Docker Desktop funcionando (`guides/02-programming/setup-docker.md`).
 - Una app con build definido (un `npm run build` que genere `dist/` o `.next/`), por ejemplo la del tópico 8.
-- Proyecto de práctica: `~/proyectos/devops-deploy` (o tu app existente).
+- Proyecto de práctica: `~/proyectos/mi-app` (o tu app existente).
 
 ## Paso a paso
 
