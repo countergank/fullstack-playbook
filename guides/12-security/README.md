@@ -7,7 +7,7 @@
 - Concepto 12 completo (leelo antes de ejecutar estas guías).
 - Una app Express corriendo con un `package.json` propio (podés usar la del tópico 4 o 8).
 - Node.js y npm funcionando (`guides/02-programming/`).
-- Proyecto de práctica: `~/proyectos/seguridad-practica` (o tu app existente).
+- Proyecto de práctica: `~/proyectos/mi-app` (o tu app existente).
 
 ## Paso a paso
 

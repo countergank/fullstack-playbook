@@ -16,7 +16,7 @@ La mayoría de los ataques a una API no son exploits sofisticados: son configura
 
 ### 1. Crear el proyecto de práctica
 
-- [ ] Creá `~/proyectos/seguridad-practica` con una app Express mínima (o usá tu app existente).
+- [ ] Creá `~/proyectos/mi-app` con una app Express mínima (o usá tu app existente).
 - [ ] `npm install express` y verificá que `GET /` responda 200 con `node server.js`.
 
 ### 2. Instalar las dependencias
